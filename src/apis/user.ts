@@ -11,3 +11,7 @@ export const login = async ({ email, password }: LoginRequest) => {
 
   return response.data;
 };
+
+export const loginWithGoogle = async () => {
+  window.location.href = `${USER_SERVICE_HOST}/auth/login/google`;
+};

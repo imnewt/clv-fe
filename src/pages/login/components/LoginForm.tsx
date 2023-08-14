@@ -8,10 +8,9 @@ import Image from "next/image";
 import classnames from "classnames";
 import { get } from "lodash";
 
-import Logo from "public/images/logo.png";
 import GoogleLogo from "public/images/google-logo.png";
 import { ACCESS_TOKEN, brandColor } from "@/utils/constants";
-import { login } from "@/apis/user";
+import { login, loginWithGoogle } from "@/apis/user";
 
 const Context = React.createContext({ name: "Default" });
 
@@ -27,17 +26,32 @@ const LoginForm = () => {
     form.setFieldsValue({ isRemember: !isRememberWatch });
   }, [form, isRememberWatch]);
 
+  const handleLoginSuccess = () => {
+    notificationApi.success({
+      message: `Login Success!`,
+    });
+    setTimeout(() => {
+      router.push("/dashboard");
+    }, 1000);
+  };
+
   const { mutate: mutateLogin, isLoading } = useMutation(login, {
     onSuccess: (data) => {
       const { access_token } = data;
       localStorage.setItem(ACCESS_TOKEN, access_token);
-      notificationApi.success({
-        message: `Login Success!`,
-      });
-      setTimeout(() => {
-        router.push("/dashboard");
-      }, 1000);
+      handleLoginSuccess();
     },
+    onError: (err: Error) => {
+      const errorMessage = get(err, "response.data.message");
+      notificationApi.error({
+        message: `Login Failed!`,
+        description: <Context.Consumer>{() => errorMessage}</Context.Consumer>,
+      });
+    },
+  });
+
+  const { mutate: mutateLoginWithGoogle } = useMutation(loginWithGoogle, {
+    onSuccess: handleLoginSuccess,
     onError: (err: Error) => {
       const errorMessage = get(err, "response.data.message");
       notificationApi.error({
@@ -60,102 +74,100 @@ const LoginForm = () => {
   return (
     <>
       {contextHolder}
-      <div className="flex bg-white">
-        <div style={{ flexGrow: 1 }}>
-          <Image src={Logo} alt="logo" className="w-full h-screen" />
-        </div>
-        <div className="flex flex-col justify-center items-center w-4/12 p-16">
-          <Typography.Text className="text-2xl font-bold mb-16">
-            Login
-          </Typography.Text>
-          <Form form={form} layout="vertical" className="w-full">
-            <Form.Item
-              label="Email"
-              name="email"
-              rules={[
-                { required: true, message: "Email is required!" },
-                {
-                  pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g,
-                  message: "Invalid email!",
-                  validateTrigger: "onSubmit",
-                },
-              ]}
-            >
-              <Input
-                prefix={<UserOutlined className="site-form-item-icon" />}
-                className="p-2"
-              />
-            </Form.Item>
-            <Form.Item
-              label="Password"
-              name="password"
-              rules={[
-                { required: true, message: "Password is required!" },
-                //   {
-                //     pattern:
-                //       /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/g,
-                //     message:
-                //       "Password must be at least 8 characters long and contain at least one letter, one number, and one special character!",
-                //     validateTrigger: "onSubmit",
-                //   },
-              ]}
-              className="m-0"
-            >
-              <Input.Password
-                prefix={<LockOutlined className="site-form-item-icon" />}
-                className="p-2"
-              />
-            </Form.Item>
-            <div className="flex justify-between items-center mt-2">
-              <div className="flex items-center">
-                <Form.Item
-                  name="isRemember"
-                  valuePropName="checked"
-                  className="m-0"
-                >
-                  <Checkbox />
-                </Form.Item>
-                <Typography.Text
-                  className="text-gray-500 cursor-pointer ml-1"
-                  onClick={handleRememberCheckboxClick}
-                >
-                  Remember Me
-                </Typography.Text>
-              </div>
-              <Typography.Text className="font-bold text-primary cursor-pointer">
-                Forgot Password?
+      <div className="flex flex-col justify-center items-center w-4/12 p-16">
+        <Typography.Text className="text-2xl font-bold mb-16">
+          Login
+        </Typography.Text>
+        <Form form={form} layout="vertical" className="w-full">
+          <Form.Item
+            label="Email"
+            name="email"
+            rules={[
+              { required: true, message: "Email is required!" },
+              {
+                pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g,
+                message: "Invalid email!",
+                validateTrigger: "onSubmit",
+              },
+            ]}
+          >
+            <Input
+              prefix={<UserOutlined className="site-form-item-icon" />}
+              className="p-2"
+            />
+          </Form.Item>
+          <Form.Item
+            label="Password"
+            name="password"
+            rules={[
+              { required: true, message: "Password is required!" },
+              //   {
+              //     pattern:
+              //       /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/g,
+              //     message:
+              //       "Password must be at least 8 characters long and contain at least one letter, one number, and one special character!",
+              //     validateTrigger: "onSubmit",
+              //   },
+            ]}
+            className="m-0"
+          >
+            <Input.Password
+              prefix={<LockOutlined className="site-form-item-icon" />}
+              className="p-2"
+            />
+          </Form.Item>
+          <div className="flex justify-between items-center mt-2">
+            <div className="flex items-center">
+              <Form.Item
+                name="isRemember"
+                valuePropName="checked"
+                className="m-0"
+              >
+                <Checkbox />
+              </Form.Item>
+              <Typography.Text
+                className="text-gray-500 cursor-pointer ml-1"
+                onClick={handleRememberCheckboxClick}
+              >
+                Remember Me
               </Typography.Text>
             </div>
-          </Form>
-
-          <div
-            className={classnames(
-              "w-full text-center rounded-lg px-8 py-2 mt-8 cursor-pointer",
-              { "opacity-50": isLoading, "cursor-not-allowed": isLoading }
-            )}
-            style={{ background: brandColor }}
-            onClick={handleSubmit}
-          >
-            <Typography.Text className="font-bold uppercase text-white">
-              Login
+            <Typography.Text className="font-bold text-primary cursor-pointer">
+              Forgot Password?
             </Typography.Text>
           </div>
+        </Form>
 
-          <Typography.Text className="text-gray-400 mt-8">
-            or login with
+        <div
+          className={classnames(
+            "w-full text-center rounded-lg px-8 py-2 mt-8 cursor-pointer",
+            { "opacity-50": isLoading, "cursor-not-allowed": isLoading }
+          )}
+          style={{ background: brandColor }}
+          onClick={handleSubmit}
+        >
+          <Typography.Text className="font-bold uppercase text-white">
+            Login
           </Typography.Text>
-          <div className="rounded-full mt-2 border p-2 shadow-md cursor-pointer">
-            <Image src={GoogleLogo} alt="google logo" className="w-4 h-4" />
-          </div>
+        </div>
 
-          <div className="mt-16">
-            <Typography.Text className="text-gray-400">
-              Don&apos;t have a account yet?
-            </Typography.Text>
-            <Typography.Text className="text-xs font-bold text-primary cursor-pointer ml-1">
-              Sign Up
-            </Typography.Text>
-          </div>
+        <Typography.Text className="text-gray-400 mt-8">
+          or login with
+        </Typography.Text>
+        <div
+          className="rounded-full mt-2 border p-2 shadow-md cursor-pointer"
+          onClick={() => mutateLoginWithGoogle()}
+        >
+          <Image src={GoogleLogo} alt="google logo" className="w-4 h-4" />
+        </div>
+
+        <div className="mt-16">
+          <Typography.Text className="text-gray-400">
+            Don&apos;t have a account yet?
+          </Typography.Text>
+          <Typography.Text className="text-xs font-bold text-primary cursor-pointer ml-1">
+            Sign Up
+          </Typography.Text>
         </div>
       </div>
     </>

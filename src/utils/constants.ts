@@ -1,4 +1,4 @@
-export const brandColor = "#191142";
+export const brandColor = "#110a3c";
 export const grayBgColor = "#eff3f9";
 
 export const ACCESS_TOKEN = "access_token";
