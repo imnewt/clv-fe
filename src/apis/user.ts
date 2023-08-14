@@ -1,6 +1,7 @@
 import Axios from "axios";
 
-import { LoginRequest } from "@/models/LoginRequest";
+import LoginRequest from "@/models/LoginRequest";
+import RegisterRequest from "@/models/RegisterRequest";
 import { USER_SERVICE_HOST } from "@/utils/constants";
 
 export const login = async ({ email, password }: LoginRequest) => {
@@ -8,10 +9,22 @@ export const login = async ({ email, password }: LoginRequest) => {
     email,
     password,
   });
-
   return response.data;
 };
 
 export const loginWithGoogle = async () => {
   window.location.href = `${USER_SERVICE_HOST}/auth/login/google`;
+};
+
+export const register = async ({
+  email,
+  userName,
+  password,
+}: RegisterRequest) => {
+  const response = await Axios.post(`${USER_SERVICE_HOST}/auth/register`, {
+    email,
+    userName,
+    password,
+  });
+  return response.data;
 };

@@ -1,13 +1,13 @@
 import { ClvBackground } from "@/components";
-import { LoginForm } from "./components";
+import { SignUpForm } from "./components";
 
-const Login = () => {
+const Register = () => {
   return (
     <div className="flex bg-white">
       <ClvBackground />
-      <LoginForm />
+      <SignUpForm />
     </div>
   );
 };
 
-export default Login;
+export default Register;
