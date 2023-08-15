@@ -1,6 +1,7 @@
-import { setAccessToken } from "@/utils/functions";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+
+import { setAccessToken } from "@/utils/functions";
 
 const Dashboard = () => {
   const router = useRouter();
@@ -17,7 +18,7 @@ const Dashboard = () => {
     }
   }, [router]);
 
-  return "dashboard";
+  return <p>dashboard ne he</p>;
 };
 
 export default Dashboard;
