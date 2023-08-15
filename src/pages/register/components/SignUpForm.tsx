@@ -9,7 +9,6 @@ import { get } from "lodash";
 
 import { brandColor } from "@/utils/constants";
 import { register } from "@/apis/user";
-import { GoogleButton } from "@/components";
 
 const Context = React.createContext({ name: "Default" });
 
@@ -157,11 +156,7 @@ const SignUpForm = () => {
           </Typography.Text>
         </div>
 
-        <GoogleButton
-          type="signUp"
-          onSuccess={handleSignUpSuccess}
-          onError={handleSignUpFail}
-        />
+        {/* <GoogleButton type="signUp" /> */}
 
         <div className="mt-6">
           <Typography.Text className="text-gray-400">

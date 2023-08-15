@@ -141,11 +141,7 @@ const LoginForm = () => {
           </Typography.Text>
         </div>
 
-        <GoogleButton
-          type="login"
-          onSuccess={handleLoginSuccess}
-          onError={handleLoginFail}
-        />
+        <GoogleButton type="login" />
 
         <div className="mt-6" style={{ flexGrow: 1 }}>
           <Typography.Text className="text-gray-400">
