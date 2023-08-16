@@ -1,7 +1,7 @@
-import React from "react";
-import { useRouter } from "next/router";
+import React, { useEffect } from "react";
 
-import { isLoggedIn, isServer } from "@/utils/functions";
+import { isLoggedIn } from "@/utils/functions";
+import { useSafePush } from "@/utils/hooks";
 
 interface PrivateRouteProps {
   children?: React.ReactNode;
@@ -9,18 +9,13 @@ interface PrivateRouteProps {
 
 const PrivateRoute: any = ({ children }: PrivateRouteProps) => {
   const loggedIn = isLoggedIn();
-  const router = useRouter();
+  const { safePush } = useSafePush();
 
-  if (isServer) {
-    return <div></div>;
-  }
+  useEffect(() => {
+    if (!loggedIn) safePush("/");
+  }, [loggedIn, safePush]);
 
-  if (loggedIn) return children;
-  else {
-    router.push("/login");
-  }
-
-  return <div></div>;
+  return children;
 };
 
 export default PrivateRoute;

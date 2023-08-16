@@ -1,20 +1,19 @@
-import { useRouter } from "next/router";
+import { useEffect } from "react";
 
-import { isLoggedIn, isServer } from "@/utils/functions";
+import { isLoggedIn } from "@/utils/functions";
+import { useSafePush } from "@/utils/hooks";
 
 const Home = () => {
   const loggedIn = isLoggedIn();
-  const router = useRouter();
+  const { safePush } = useSafePush();
 
-  if (isServer) {
-    return null;
-  }
-
-  if (loggedIn) {
-    router.push("/dashboard");
-  } else {
-    router.push("/login");
-  }
+  useEffect(() => {
+    if (loggedIn) {
+      safePush("/dashboard");
+    } else {
+      safePush("/login");
+    }
+  }, [safePush, loggedIn]);
 
   return null;
 };
