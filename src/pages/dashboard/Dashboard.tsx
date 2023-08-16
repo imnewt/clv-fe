@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 
 import { setAccessToken } from "@/utils/functions";
+import UserManagement from "../users/UserManagement";
 
 const Dashboard = () => {
   const router = useRouter();
@@ -18,7 +19,7 @@ const Dashboard = () => {
     }
   }, [router]);
 
-  return <p>dashboard ne he</p>;
+  return <UserManagement />;
 };
 
 export default Dashboard;

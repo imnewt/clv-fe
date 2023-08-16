@@ -8,7 +8,7 @@ import classnames from "classnames";
 import { get } from "lodash";
 
 import { ACCESS_TOKEN_KEY, brandColor } from "@/utils/constants";
-import { login } from "@/apis/user";
+import { login } from "@/apis/auth";
 import { GoogleButton } from "@/components";
 
 const Context = React.createContext({ name: "Default" });

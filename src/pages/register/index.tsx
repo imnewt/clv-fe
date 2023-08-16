@@ -1,5 +1,5 @@
 import { ClvBackground } from "@/components";
-import { SignUpForm } from "./components";
+import SignUpForm from "./components/SignUpForm";
 
 const Register = () => {
   return (

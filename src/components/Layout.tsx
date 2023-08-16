@@ -1,6 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { Layout as AntLayout, Menu, theme } from "antd";
-import { UserOutlined, SettingOutlined, TeamOutlined } from "@ant-design/icons";
+import React, { useEffect, useState, useMemo } from "react";
+import { Layout, Menu, theme } from "antd";
+import {
+  SettingOutlined,
+  TeamOutlined,
+  ClusterOutlined,
+  BranchesOutlined,
+} from "@ant-design/icons";
 import Image from "next/image";
 import { useRouter } from "next/router";
 
@@ -9,7 +14,7 @@ import TransparentLogo from "public/images/logo-transparent.png";
 import { brandColor } from "@/utils/constants";
 import Link from "next/link";
 
-const { Header, Sider, Content } = AntLayout;
+const { Header, Sider, Content } = Layout;
 
 interface LayoutProps {
   Component: React.FC;
@@ -17,27 +22,36 @@ interface LayoutProps {
 
 const menu = [
   {
-    key: "profile",
-    label: "Profile",
-    icon: <UserOutlined />,
-    path: "/profile",
-  },
-  {
     key: "dashboard",
     label: "User Management",
     icon: <TeamOutlined />,
     path: "/dashboard",
   },
   {
+    key: "roles",
+    label: "Role Management",
+    icon: <ClusterOutlined />,
+    path: "/roles",
+  },
+  {
+    key: "permissions",
+    label: "Permission Management",
+    icon: <BranchesOutlined />,
+    path: "/permissions",
+  },
+  {
     key: "settings",
     label: "Settings",
     icon: <SettingOutlined />,
-    path: "/profile",
+    path: "/settings",
   },
 ];
 
-const Layout = ({ Component }: LayoutProps) => {
+const MainLayout = ({ Component }: LayoutProps) => {
   const router = useRouter();
+  const {
+    token: { colorBgContainer },
+  } = theme.useToken();
 
   const [collapsed, setCollapsed] = useState<boolean>(false);
   const [mounted, setMounted] = useState<boolean>(false);
@@ -46,19 +60,20 @@ const Layout = ({ Component }: LayoutProps) => {
     setMounted(true);
   }, []);
 
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
+  const selectedMenu = useMemo(() => {
+    return router.pathname.split("/")[1];
+  }, [router]);
 
   if (!mounted) return <></>;
   return (
-    <AntLayout className="min-h-screen">
+    <Layout className="min-h-screen" hasSider>
       <Sider
         collapsible
         collapsed={collapsed}
         onCollapse={(value) => setCollapsed(value)}
         className="shadow-md"
         style={{ background: brandColor }}
+        width="15rem"
       >
         <div className="flex justify-center border-b border-b-white mx-4">
           <Image src={Logo} alt="logo" className="w-32 " />
@@ -68,25 +83,20 @@ const Layout = ({ Component }: LayoutProps) => {
           mode="inline"
           className="mt-4"
           style={{ background: "transparent" }}
-          defaultSelectedKeys={[router.pathname]}
+          defaultSelectedKeys={[selectedMenu]}
         >
           {menu.map((menuItem) => (
-            <Link key={menuItem.key} href={menuItem.path}>
-              <Menu.Item
-                // key={menuItem.key}
-                icon={menuItem.icon}
-                // onClick={() =>
-                //   router.push(menuItem.path, undefined, { shallow: true })
-                // }
-                className="text-white"
-              >
-                <span>{menuItem.label}</span>
-              </Menu.Item>
-            </Link>
+            <Menu.Item
+              key={menuItem.key}
+              icon={menuItem.icon}
+              className="text-white"
+            >
+              <Link href={menuItem.path}>{menuItem.label}</Link>
+            </Menu.Item>
           ))}
         </Menu>
       </Sider>
-      <AntLayout>
+      <Layout>
         <Header
           className="flex items-center h-24 shadow-md"
           style={{ background: colorBgContainer }}
@@ -101,9 +111,9 @@ const Layout = ({ Component }: LayoutProps) => {
         >
           <Component />
         </Content>
-      </AntLayout>
-    </AntLayout>
+      </Layout>
+    </Layout>
   );
 };
 
-export default Layout;
+export default MainLayout;

@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { Typography } from "antd";
 import Image from "next/image";
 
-import { loginWithGoogle } from "@/apis/user";
+import { loginWithGoogle } from "@/apis/auth";
 import GoogleLogo from "public/images/google-logo.png";
 
 export interface GoogleButtonProps {

@@ -8,7 +8,7 @@ import classnames from "classnames";
 import { get } from "lodash";
 
 import { brandColor } from "@/utils/constants";
-import { register } from "@/apis/user";
+import { register } from "@/apis/auth";
 
 const Context = React.createContext({ name: "Default" });
 

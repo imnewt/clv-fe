@@ -1,5 +1,5 @@
 import { ClvBackground } from "@/components";
-import { LoginForm } from "./components";
+import LoginForm from "./components/LoginForm";
 
 const Login = () => {
   return (
