@@ -12,7 +12,7 @@ const PrivateRoute: any = ({ children }: PrivateRouteProps) => {
   const { safePush } = useSafePush();
 
   useEffect(() => {
-    if (!loggedIn) safePush("/");
+    if (!loggedIn) safePush("/login");
   }, [loggedIn, safePush]);
 
   return children;

@@ -8,11 +8,11 @@ import {
 } from "@ant-design/icons";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 import Logo from "public/images/logo.png";
 import TransparentLogo from "public/images/logo-transparent.png";
 import { brandColor } from "@/utils/constants";
-import Link from "next/link";
 
 const { Header, Sider, Content } = Layout;
 

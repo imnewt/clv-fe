@@ -1,8 +1,12 @@
-import { Layout } from "@/components";
+import { Layout, PrivateRoute } from "@/components";
 import Settings from "./Settings";
 
 const SettingsPage = () => {
-  return <Layout Component={Settings} />;
+  return (
+    <PrivateRoute>
+      <Layout Component={Settings} />
+    </PrivateRoute>
+  );
 };
 
 export default SettingsPage;

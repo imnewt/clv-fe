@@ -7,9 +7,10 @@ import { useRouter } from "next/navigation";
 import classnames from "classnames";
 import { get } from "lodash";
 
-import { ACCESS_TOKEN_KEY, brandColor } from "@/utils/constants";
+import { brandColor } from "@/utils/constants";
 import { login } from "@/apis/auth";
 import { GoogleButton } from "@/components";
+import { setAuth } from "@/utils/functions";
 
 const Context = React.createContext({ name: "Default" });
 
@@ -30,7 +31,7 @@ const LoginForm = () => {
       message: `Login Success!`,
     });
     setTimeout(() => {
-      router.push("/dashboard");
+      router.push("/users");
     }, 1000);
   }, [notificationApi, router]);
 
@@ -46,8 +47,8 @@ const LoginForm = () => {
 
   const { mutate: mutateLogin, isLoading } = useMutation(login, {
     onSuccess: (data) => {
-      const { access_token } = data;
-      localStorage.setItem(ACCESS_TOKEN_KEY, access_token);
+      const { accessToken, refreshToken } = data;
+      setAuth({ accessToken, refreshToken });
       handleLoginSuccess();
     },
     onError: (err: Error) => {

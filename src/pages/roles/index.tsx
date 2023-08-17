@@ -1,8 +1,12 @@
-import { Layout } from "@/components";
+import { Layout, PrivateRoute } from "@/components";
 import RoleManagement from "./RoleManagement";
 
 const RoleManagementPage = () => {
-  return <Layout Component={RoleManagement} />;
+  return (
+    <PrivateRoute>
+      <Layout Component={RoleManagement} />
+    </PrivateRoute>
+  );
 };
 
 export default RoleManagementPage;

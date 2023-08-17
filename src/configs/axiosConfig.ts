@@ -1,7 +1,19 @@
-import axios, { InternalAxiosRequestConfig } from "axios";
+import axios, { AxiosRequestConfig, InternalAxiosRequestConfig } from "axios";
 import { get } from "lodash";
 
-import { getAccessToken, removeAccessToken } from "@/utils/functions";
+import {
+  getAccessToken,
+  getRefreshToken,
+  logout,
+  setAuth,
+} from "@/utils/functions";
+import { Auth } from "@/models/Auth";
+import { refreshToken as doRefreshToken } from "@/apis/auth";
+import { INVALID_REFRESH_TOKEN } from "@/utils/constants";
+
+interface Config extends AxiosRequestConfig {
+  _retry: boolean;
+}
 
 const TIMEOUT = 30 * 60 * 1000;
 axios.defaults.timeout = TIMEOUT;
@@ -26,9 +38,24 @@ const setupAxiosInterceptors = (): void => {
     return response;
   };
   const onResponseError = (err: any) => {
+    const errorMessage = get(err, "response.data.message") || "";
+    if (errorMessage === INVALID_REFRESH_TOKEN) {
+      return logout();
+    }
+
     const status = err.status || get(err, "response.status");
-    if (status === 403 || status === 401) {
-      removeAccessToken();
+    const originalRequest = err.config as Config;
+
+    if ((status === 403 || status === 401) && !originalRequest._retry) {
+      const refreshToken = getRefreshToken();
+      originalRequest._retry = true;
+      return new Promise(async (resolve, _) => {
+        try {
+          const auth: Auth = await doRefreshToken(refreshToken);
+          if (!auth || !auth.accessToken) return logout();
+          setAuth(auth);
+        } catch (_) {}
+      });
     }
     return Promise.reject(err);
   };

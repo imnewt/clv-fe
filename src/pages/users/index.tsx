@@ -1,8 +1,12 @@
-import { Layout } from "@/components";
+import { Layout, PrivateRoute } from "@/components";
 import UserManagement from "./UserManagement";
 
 const UserManagementPage = () => {
-  return <Layout Component={UserManagement} />;
+  return (
+    <PrivateRoute>
+      <Layout Component={UserManagement} />
+    </PrivateRoute>
+  );
 };
 
 export default UserManagementPage;

@@ -28,3 +28,10 @@ export const register = async ({
   });
   return response.data;
 };
+
+export const refreshToken = async (refreshToken: string) => {
+  const response = await Axios.post(`${USER_SERVICE_HOST}/auth/refresh-token`, {
+    refreshToken,
+  });
+  return response.data;
+};
