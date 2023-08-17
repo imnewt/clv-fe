@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { Form, Input, Typography, Checkbox, notification } from "antd";
 import { useForm, useWatch } from "antd/lib/form/Form";
-import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import { LockOutlined, MailOutlined } from "@ant-design/icons";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import classnames from "classnames";
@@ -91,7 +91,7 @@ const LoginForm = () => {
             ]}
           >
             <Input
-              prefix={<UserOutlined className="site-form-item-icon" />}
+              prefix={<MailOutlined className="site-form-item-icon" />}
               className="p-2"
             />
           </Form.Item>

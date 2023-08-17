@@ -7,23 +7,13 @@ import User from "@/models/User";
 import Role from "@/models/Role";
 import { useDeleteUser, useGetAllUsers } from "@/hooks/users";
 
-interface UserTableProps {}
+interface UserTableProps {
+  onEditButtonClick: (userId: string) => void;
+}
 
-const UserTable = ({}: UserTableProps) => {
-  const { data, isLoading } = useGetAllUsers();
-
-  const { deleteUser, isLoading: isDeletingUser } = useDeleteUser({
-    options: {
-      onSuccess: () => {
-        console.log("Mutation was successful");
-        // Additional actions on success
-      },
-      onError: (error) => {
-        console.error("Mutation error:", error);
-        // Additional actions on error
-      },
-    },
-  });
+const UserTable = ({ onEditButtonClick }: UserTableProps) => {
+  const { users, isLoadingUsers } = useGetAllUsers();
+  const { deleteUser } = useDeleteUser({});
 
   const columns: ColumnsType<User> = [
     {
@@ -50,7 +40,7 @@ const UserTable = ({}: UserTableProps) => {
           {roles.map((role: Role) => {
             return (
               <Tag color="geekblue" key={role.id}>
-                {role.name.toUpperCase()}
+                {role.name}
               </Tag>
             );
           })}
@@ -64,6 +54,12 @@ const UserTable = ({}: UserTableProps) => {
       render: (createdAt) => moment(createdAt).format("YYYY-MM-DD HH:mm"),
     },
     {
+      title: "Last Updated At",
+      key: "updatedAt",
+      dataIndex: "updatedAt",
+      render: (updatedAt) => moment(updatedAt).format("YYYY-MM-DD HH:mm"),
+    },
+    {
       title: "Action",
       key: "action",
       dataIndex: "id",
@@ -71,13 +67,14 @@ const UserTable = ({}: UserTableProps) => {
         <Space>
           <EditOutlined
             className="hover:text-primary mr-2"
-            onClick={() => {}}
+            onClick={() => onEditButtonClick(id)}
           />
           <Popconfirm
             title="Are you sure you want to delete this user?"
             onConfirm={() => deleteUser({ userId: id })}
             okText="Yes"
             cancelText="No"
+            okType="danger"
           >
             <DeleteOutlined className="hover:text-primary" />
           </Popconfirm>
@@ -87,12 +84,14 @@ const UserTable = ({}: UserTableProps) => {
   ];
 
   return (
-    <Table
-      columns={columns}
-      dataSource={data}
-      loading={isLoading}
-      rowKey={(user) => user.id}
-    />
+    <>
+      <Table
+        columns={columns}
+        dataSource={users}
+        loading={isLoadingUsers}
+        rowKey={(user) => user.id}
+      />
+    </>
   );
 };
 

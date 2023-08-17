@@ -22,10 +22,10 @@ interface LayoutProps {
 
 const menu = [
   {
-    key: "dashboard",
+    key: "users",
     label: "User Management",
     icon: <TeamOutlined />,
-    path: "/dashboard",
+    path: "/users",
   },
   {
     key: "roles",

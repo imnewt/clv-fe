@@ -1,5 +1,9 @@
+import { notification } from "antd";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+
+const DEFAULT_ERROR_DESCRIPTION = "An error has occurred. Please try again!";
+const DEFAULT_ERROR_MESSAGE = "Error!";
 
 // safePush is used to avoid route pushing errors when users click multiple times
 // or when the network is slow:  "Error: Abort fetching component for route"
@@ -27,4 +31,15 @@ export const useSafePush = () => {
   }, [router, setOnChanging]);
 
   return { safePush };
+};
+
+export const useShowError = () => {
+  const showError = (message: string, description: string) => {
+    notification.error({
+      message: message || DEFAULT_ERROR_MESSAGE,
+      description: description || DEFAULT_ERROR_DESCRIPTION,
+    });
+  };
+
+  return { showError };
 };
