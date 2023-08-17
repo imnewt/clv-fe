@@ -22,7 +22,7 @@ const GoogleButton = ({ type }: GoogleButtonProps) => {
 
   return (
     <>
-      <Typography.Text className="text-gray-400 mt-6">
+      <Typography.Text className="!text-gray-400 mt-6">
         or {renderTypeTitle()} with
       </Typography.Text>
       <div

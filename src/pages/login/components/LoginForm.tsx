@@ -73,86 +73,95 @@ const LoginForm = () => {
   return (
     <>
       {contextHolder}
-      <div className="flex flex-col justify-center items-center w-4/12 p-16">
-        <Typography.Text className="text-2xl font-bold mb-16">
-          Login
-        </Typography.Text>
-        <Form form={form} layout="vertical" className="w-full">
-          <Form.Item
-            label="Email"
-            name="email"
-            rules={[
-              { required: true, message: "Email is required!" },
-              {
-                pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g,
-                message: "Invalid email!",
-                validateTrigger: "onSubmit",
-              },
-            ]}
+      <div className="flex justify-center items-center w-4/12 p-16">
+        <div className="flex flex-col items-center w-full">
+          <Typography.Text
+            className="!text-2xl font-bold mb-16"
+            style={{ color: brandColor }}
           >
-            <Input
-              prefix={<MailOutlined className="site-form-item-icon" />}
-              className="p-2"
-            />
-          </Form.Item>
-          <Form.Item
-            label="Password"
-            name="password"
-            rules={[{ required: true, message: "Password is required!" }]}
-            className="m-0"
-          >
-            <Input.Password
-              prefix={<LockOutlined className="site-form-item-icon" />}
-              className="p-2"
-            />
-          </Form.Item>
-          <div className="flex justify-between items-center mt-2">
-            <div className="flex items-center">
-              <Form.Item
-                name="isRemember"
-                valuePropName="checked"
-                className="m-0"
-              >
-                <Checkbox />
-              </Form.Item>
-              <Typography.Text
-                className="text-gray-500 cursor-pointer ml-1"
-                onClick={handleRememberCheckboxClick}
-              >
-                Remember Me
-              </Typography.Text>
-            </div>
-            <Typography.Text className="font-bold text-primary cursor-pointer">
-              Forgot Password?
-            </Typography.Text>
-          </div>
-        </Form>
-
-        <div
-          className={classnames(
-            "w-full text-center rounded-lg px-8 py-2 mt-6 cursor-pointer",
-            { "opacity-50": isLoading, "cursor-not-allowed": isLoading }
-          )}
-          style={{ background: brandColor }}
-          onClick={handleSubmit}
-        >
-          <Typography.Text className="font-bold uppercase text-white">
             Login
           </Typography.Text>
-        </div>
+          <Form form={form} layout="vertical" className="w-full">
+            <Form.Item
+              label="Email"
+              name="email"
+              rules={[
+                { required: true, message: "Email is required!" },
+                {
+                  pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g,
+                  message: "Invalid email!",
+                  validateTrigger: "onSubmit",
+                },
+              ]}
+            >
+              <Input
+                prefix={<MailOutlined className="site-form-item-icon" />}
+                className="!p-2"
+              />
+            </Form.Item>
+            <Form.Item
+              label="Password"
+              name="password"
+              rules={[{ required: true, message: "Password is required!" }]}
+              className="m-0"
+            >
+              <Input.Password
+                prefix={<LockOutlined className="site-form-item-icon" />}
+                className="!p-2"
+              />
+            </Form.Item>
+            <div className="flex justify-between items-center mt-2">
+              <div className="flex items-center">
+                <Form.Item
+                  name="isRemember"
+                  valuePropName="checked"
+                  className="!m-0"
+                >
+                  <Checkbox />
+                </Form.Item>
+                <Typography.Text
+                  className="text-gray-500 cursor-pointer ml-1"
+                  onClick={handleRememberCheckboxClick}
+                >
+                  Remember Me
+                </Typography.Text>
+              </div>
+              <Typography.Text
+                className="font-bold cursor-pointer"
+                style={{ color: brandColor }}
+              >
+                Forgot Password?
+              </Typography.Text>
+            </div>
+          </Form>
 
-        <GoogleButton type="login" />
-
-        <div className="mt-6" style={{ flexGrow: 1 }}>
-          <Typography.Text className="text-gray-400">
-            Don&apos;t have an account yet?
-          </Typography.Text>
-          <Typography.Text
-            className="font-bold text-primary cursor-pointer ml-1"
-            onClick={handleNavigateToSignUpPage}
+          <div
+            className={classnames(
+              "w-full text-center rounded-lg px-8 py-2 mt-6 cursor-pointer",
+              { "opacity-50": isLoading, "cursor-not-allowed": isLoading }
+            )}
+            style={{ background: brandColor }}
+            onClick={handleSubmit}
           >
-            Sign Up
-          </Typography.Text>
+            <Typography.Text className="font-bold uppercase !text-white">
+              Login
+            </Typography.Text>
+          </div>
+
+          <GoogleButton type="login" />
+
+          <div className="mt-6" style={{ flexGrow: 1 }}>
+            <Typography.Text className="!text-gray-400">
+              Don&apos;t have an account yet?
+            </Typography.Text>
+            <Typography.Text
+              className="font-bold cursor-pointer ml-1"
+              style={{ color: brandColor }}
+              onClick={handleNavigateToSignUpPage}
+            >
+              Sign Up
+            </Typography.Text>
+          </div>
         </div>
       </div>
     </>

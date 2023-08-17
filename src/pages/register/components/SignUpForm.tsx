@@ -69,7 +69,10 @@ const SignUpForm = () => {
     <>
       {contextHolder}
       <div className="flex flex-col justify-center items-center w-4/12 px-16 py-8">
-        <Typography.Text className="text-2xl font-bold mb-8">
+        <Typography.Text
+          className="!text-2xl font-bold mb-8"
+          style={{ color: brandColor }}
+        >
           Sign Up
         </Typography.Text>
         <Form form={form} layout="vertical" className="w-full">
@@ -87,7 +90,7 @@ const SignUpForm = () => {
           >
             <Input
               prefix={<MailOutlined className="site-form-item-icon" />}
-              className="p-2"
+              className="!p-2"
             />
           </Form.Item>
 
@@ -98,7 +101,7 @@ const SignUpForm = () => {
           >
             <Input
               prefix={<UserOutlined className="site-form-item-icon" />}
-              className="p-2"
+              className="!p-2"
             />
           </Form.Item>
 
@@ -117,7 +120,7 @@ const SignUpForm = () => {
           >
             <Input.Password
               prefix={<LockOutlined className="site-form-item-icon" />}
-              className="p-2"
+              className="!p-2"
             />
           </Form.Item>
 
@@ -138,7 +141,7 @@ const SignUpForm = () => {
           >
             <Input.Password
               prefix={<LockOutlined className="site-form-item-icon" />}
-              className="p-2"
+              className="!p-2"
             />
           </Form.Item>
         </Form>
@@ -151,17 +154,18 @@ const SignUpForm = () => {
           style={{ background: brandColor }}
           onClick={handleSubmit}
         >
-          <Typography.Text className="font-bold uppercase text-white">
+          <Typography.Text className="font-bold uppercase !text-white">
             Sign Up
           </Typography.Text>
         </div>
 
         <div className="mt-6">
-          <Typography.Text className="text-gray-400">
+          <Typography.Text className="!text-gray-400">
             Already have an account?
           </Typography.Text>
           <Typography.Text
-            className="font-bold text-primary cursor-pointer ml-1"
+            className="font-bold cursor-pointer ml-1"
+            style={{ color: brandColor }}
             onClick={handleNavigateToLoginPage}
           >
             Log In
