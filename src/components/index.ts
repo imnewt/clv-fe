@@ -1,6 +1,7 @@
-import ClvBackground from "./ClvBackground";
-import GoogleButton from "./GoogleButton";
 import PrivateRoute from "./PrivateRoute";
 import Layout from "./Layout";
+import ClvBackground from "./ClvBackground";
+import GoogleButton from "./GoogleButton";
+import SearchBar from "./SearchBar";
 
-export { ClvBackground, GoogleButton, Layout, PrivateRoute };
+export { PrivateRoute, Layout, ClvBackground, GoogleButton, SearchBar };

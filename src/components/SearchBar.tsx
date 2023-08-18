@@ -9,10 +9,11 @@ import { Input } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 
 interface SearchBarProps {
+  placeholder: string;
   onSetSearchTerm: Dispatch<SetStateAction<string>>;
 }
 
-const SearchBar = ({ onSetSearchTerm }: SearchBarProps) => {
+const SearchBar = ({ placeholder, onSetSearchTerm }: SearchBarProps) => {
   const [rawSearch, setRawSearch] = useState("");
 
   useEffect(() => {
@@ -33,7 +34,7 @@ const SearchBar = ({ onSetSearchTerm }: SearchBarProps) => {
     <Input
       allowClear
       className="w-64"
-      placeholder="Search by username, email"
+      placeholder={placeholder}
       onChange={(e) => handleInputChange(e)}
       prefix={<SearchOutlined />}
     />

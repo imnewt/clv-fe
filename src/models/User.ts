@@ -8,12 +8,8 @@ export interface NewUser {
   roleIds: string[];
 }
 
-export default interface User extends Base {
+export default interface User extends NewUser, Base {
   id: string;
-  userName: string;
-  email: string;
   isActive: boolean;
-  isDeleted: boolean;
   roles: Role[];
-  roleIds?: string[];
 }

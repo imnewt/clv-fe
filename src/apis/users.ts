@@ -4,7 +4,11 @@ import User, { NewUser } from "@/models/User";
 import { USER_SERVICE_HOST } from "@/utils/constants";
 import { requestParamsFromObject } from "@/utils/functions";
 
-export const getAllUsers = async ({ searchTerm }: { searchTerm: string }) => {
+export const getAllUsers = async ({
+  searchTerm = "",
+}: {
+  searchTerm: string;
+}) => {
   const response = await Axios.get(
     `${USER_SERVICE_HOST}/users${requestParamsFromObject({
       search: searchTerm,
@@ -19,7 +23,7 @@ export const getUserDetail = async (userId: string) => {
 };
 
 export const createUser = async (user: NewUser) => {
-  const response = await Axios.post(`${USER_SERVICE_HOST}/users`, {
+  const response = await Axios.post(`${USER_SERVICE_HOST}/users/create`, {
     ...user,
   });
   return response.data;

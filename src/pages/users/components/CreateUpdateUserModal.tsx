@@ -24,7 +24,7 @@ const CreateUpdateUserModal = ({
     userId,
     enabled: isOpen,
   });
-  const { roles, isLoadingRoles } = useGetAllRoles();
+  const { roles, isLoadingRoles } = useGetAllRoles({});
 
   const handleClose = useCallback(() => {
     form.resetFields();

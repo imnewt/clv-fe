@@ -4,7 +4,7 @@ import { Typography, Button } from "antd";
 import { useGetAllUsers } from "@/hooks/users";
 import UserTable from "./components/UserTable";
 import CreateUpdateUserModal from "./components/CreateUpdateUserModal";
-import SearchBar from "./components/SearchBar";
+import { SearchBar } from "@/components";
 
 const UserManagement = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -31,7 +31,10 @@ const UserManagement = () => {
     <div>
       <Typography.Title level={3}>User Management</Typography.Title>
       <div className="flex">
-        <SearchBar onSetSearchTerm={setSearchTerm} />
+        <SearchBar
+          placeholder="Search by username, email"
+          onSetSearchTerm={setSearchTerm}
+        />
         <Button
           className="bg-blue-500 !text-white ml-2"
           onClick={handleOpenModal}
