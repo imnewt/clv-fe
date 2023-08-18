@@ -1,17 +1,36 @@
-import { useState } from "react";
-import { Typography, Button } from "antd";
+import { useState, useMemo } from "react";
+import { Typography, Button, TablePaginationConfig } from "antd";
 
 import { useGetAllRoles } from "@/hooks/roles";
 import RoleTable from "./components/RoleTable";
 import CreateUpdateRoleModal from "./components/CreateUpdateRoleModal";
 import { SearchBar } from "@/components";
+import {
+  DEFAULT_PAGE_NUMBER,
+  DEFAULT_PAGE_SIZE,
+  DEFAULT_PAGINATION,
+} from "@/utils/constants";
 
 const RoleManagement = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedRoleId, setSelectedRoleId] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [pagination, setPagination] =
+    useState<TablePaginationConfig>(DEFAULT_PAGINATION);
 
-  const { roles = [], isLoadingRoles } = useGetAllRoles({ searchTerm });
+  const {
+    roles = [],
+    total,
+    isLoadingRoles,
+  } = useGetAllRoles({
+    searchTerm,
+    pageNumber: pagination.current || DEFAULT_PAGE_NUMBER,
+    pageSize: pagination.pageSize || DEFAULT_PAGE_SIZE,
+  });
+
+  const tablePagination = useMemo(() => {
+    return { ...pagination, total };
+  }, [pagination, total]);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -46,6 +65,8 @@ const RoleManagement = () => {
         <RoleTable
           data={roles}
           isLoading={isLoadingRoles}
+          pagination={tablePagination}
+          onSetPagination={setPagination}
           onEditButtonClick={handleEditButtonClick}
         />
       </div>

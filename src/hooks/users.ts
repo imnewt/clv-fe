@@ -2,6 +2,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { message } from "antd";
 import { get } from "lodash";
 
+import User from "@/models/User";
+import { Filter } from "@/models/Filter";
 import {
   createUser,
   deleteUser,
@@ -9,14 +11,19 @@ import {
   getUserDetail,
   updateUser,
 } from "@/apis/users";
-import User from "@/models/User";
 import { useShowError } from "@/utils/hooks";
+import { DEFAULT_FILTER } from "@/utils/constants";
 
-export const useGetAllUsers = ({ searchTerm }: { searchTerm: string }) => {
-  const query = useQuery<User[]>(["get_all_users", searchTerm], () =>
-    getAllUsers({ searchTerm })
+export const useGetAllUsers = (filter: Filter = DEFAULT_FILTER) => {
+  const query = useQuery<{ users: User[]; total: number }>(
+    ["get_all_users", filter],
+    () => getAllUsers(filter)
   );
-  return { users: query.data, isLoadingUsers: query.isLoading };
+  return {
+    users: query.data?.users,
+    total: query.data?.total,
+    isLoadingUsers: query.isLoading,
+  };
 };
 
 export const useGetUserDetail = ({

@@ -1,18 +1,13 @@
 import Axios from "axios";
 
-import { USER_SERVICE_HOST } from "@/utils/constants";
 import Role, { NewRole } from "@/models/Role";
+import { Filter } from "@/models/Filter";
 import { requestParamsFromObject } from "@/utils/functions";
+import { USER_SERVICE_HOST } from "@/utils/constants";
 
-export const getAllRoles = async ({
-  searchTerm = "",
-}: {
-  searchTerm: string;
-}) => {
+export const getAllRoles = async (filter: Filter) => {
   const response = await Axios.get(
-    `${USER_SERVICE_HOST}/roles${requestParamsFromObject({
-      search: searchTerm,
-    })}`
+    `${USER_SERVICE_HOST}/roles${requestParamsFromObject({ ...filter })}`
   );
   return response.data;
 };

@@ -1,18 +1,13 @@
 import Axios from "axios";
 
 import User, { NewUser } from "@/models/User";
+import { Filter } from "@/models/Filter";
 import { USER_SERVICE_HOST } from "@/utils/constants";
 import { requestParamsFromObject } from "@/utils/functions";
 
-export const getAllUsers = async ({
-  searchTerm = "",
-}: {
-  searchTerm: string;
-}) => {
+export const getAllUsers = async (filter: Filter) => {
   const response = await Axios.get(
-    `${USER_SERVICE_HOST}/users${requestParamsFromObject({
-      search: searchTerm,
-    })}`
+    `${USER_SERVICE_HOST}/users${requestParamsFromObject({ ...filter })}`
   );
   return response.data;
 };

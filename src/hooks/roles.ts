@@ -2,6 +2,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { message } from "antd";
 import { get } from "lodash";
 
+import Role from "@/models/Role";
+import { Filter } from "@/models/Filter";
 import {
   createRole,
   deleteRole,
@@ -9,18 +11,19 @@ import {
   getRoleDetail,
   updateRole,
 } from "@/apis/roles";
-import Role from "@/models/Role";
 import { useShowError } from "@/utils/hooks";
+import { DEFAULT_FILTER } from "@/utils/constants";
 
-export const useGetAllRoles = ({
-  searchTerm = "",
-}: {
-  searchTerm?: string;
-}) => {
-  const query = useQuery<Role[]>(["get_all_roles", searchTerm], () =>
-    getAllRoles({ searchTerm })
+export const useGetAllRoles = (filter: Filter = DEFAULT_FILTER) => {
+  const query = useQuery<{ roles: Role[]; total: number }>(
+    ["get_all_roles", filter],
+    () => getAllRoles(filter)
   );
-  return { roles: query.data, isLoadingRoles: query.isLoading };
+  return {
+    roles: query.data?.roles,
+    total: query.data?.total,
+    isLoadingRoles: query.isLoading,
+  };
 };
 
 export const useGetRoleDetail = ({

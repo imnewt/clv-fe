@@ -23,7 +23,7 @@ const CreateUpdateUserModal = ({
     roleId,
     enabled: isOpen,
   });
-  const { permissions = [], isLoadingPermissions } = useGetAllPermissions({});
+  const { permissions = [], isLoadingPermissions } = useGetAllPermissions();
 
   const handleClose = useCallback(() => {
     form.resetFields();

@@ -1,20 +1,29 @@
-import { Popconfirm, Space, Table, Tag } from "antd";
+import { Dispatch, SetStateAction } from "react";
+import { Popconfirm, Space, Table, Tag, TablePaginationConfig } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { ColumnsType } from "antd/es/table";
+import moment from "moment";
 
 import { useDeleteRole } from "@/hooks/roles";
 import { ADMIN_ROLE_ID, USER_ROLE_ID } from "@/utils/constants";
 import Role from "@/models/Role";
 import Permission from "@/models/Permission";
-import moment from "moment";
 
 interface RoleTableProps {
   data: Role[];
   isLoading: boolean;
+  pagination: TablePaginationConfig;
+  onSetPagination: Dispatch<SetStateAction<TablePaginationConfig>>;
   onEditButtonClick: (userId: string) => void;
 }
 
-const RoleTable = ({ data, isLoading, onEditButtonClick }: RoleTableProps) => {
+const RoleTable = ({
+  data,
+  isLoading,
+  pagination,
+  onSetPagination,
+  onEditButtonClick,
+}: RoleTableProps) => {
   const { deleteRole } = useDeleteRole({});
 
   const columns: ColumnsType<Role> = [
@@ -94,6 +103,8 @@ const RoleTable = ({ data, isLoading, onEditButtonClick }: RoleTableProps) => {
         columns={columns}
         dataSource={data}
         loading={isLoading}
+        pagination={pagination}
+        onChange={onSetPagination}
         rowKey={(role) => role.id}
       />
     </>

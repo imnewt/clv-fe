@@ -1,6 +1,7 @@
+import { Dispatch, SetStateAction } from "react";
 import { Popconfirm, Space, Table, Tag } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { ColumnsType } from "antd/es/table";
+import { ColumnsType, TablePaginationConfig } from "antd/lib/table";
 import moment from "moment";
 
 import User from "@/models/User";
@@ -10,10 +11,18 @@ import { useDeleteUser } from "@/hooks/users";
 interface UserTableProps {
   data: User[];
   isLoading: boolean;
+  pagination: TablePaginationConfig;
+  onSetPagination: Dispatch<SetStateAction<TablePaginationConfig>>;
   onEditButtonClick: (userId: string) => void;
 }
 
-const UserTable = ({ data, isLoading, onEditButtonClick }: UserTableProps) => {
+const UserTable = ({
+  data,
+  isLoading,
+  pagination,
+  onSetPagination,
+  onEditButtonClick,
+}: UserTableProps) => {
   const { deleteUser } = useDeleteUser({});
 
   const columns: ColumnsType<User> = [
@@ -86,9 +95,11 @@ const UserTable = ({ data, isLoading, onEditButtonClick }: UserTableProps) => {
 
   return (
     <>
-      <Table
+      <Table<User>
         columns={columns}
         dataSource={data}
+        pagination={pagination}
+        onChange={onSetPagination}
         loading={isLoading}
         rowKey={(user) => user.id}
       />
