@@ -1,10 +1,10 @@
 import { PrivateRoute, Layout } from "@/components";
-import Permission from "./Permission";
+import PermissionManagement from "./PermissionManagement";
 
 const PermissionPage = () => {
   return (
     <PrivateRoute>
-      <Layout Component={Permission} />
+      <Layout Component={PermissionManagement} />
     </PrivateRoute>
   );
 };

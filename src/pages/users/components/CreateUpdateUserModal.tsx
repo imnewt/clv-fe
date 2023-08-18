@@ -24,7 +24,7 @@ const CreateUpdateUserModal = ({
     userId,
     enabled: isOpen,
   });
-  const { roles, isLoadingRoles } = useGetAllRoles({});
+  const { roles = [], isLoadingRoles } = useGetAllRoles({});
 
   const handleClose = useCallback(() => {
     form.resetFields();
@@ -34,7 +34,7 @@ const CreateUpdateUserModal = ({
   const isCreate = useMemo(() => !userId, [userId]);
 
   const roleOptions = useMemo(() => {
-    return roles?.map((role) => ({ value: role.id, label: role.name })) || [];
+    return roles?.map((role) => ({ value: role.name, label: role.name })) || [];
   }, [roles]);
 
   const { createUser, isCreatingUser } = useCreateUser({
@@ -49,14 +49,18 @@ const CreateUpdateUserModal = ({
       form.setFieldsValue({
         email: user.email,
         userName: user.userName,
-        roleIds: user.roles.map((role) => role.id),
+        roleIds: user.roles.map((role) => role.name),
       });
     }
   }, [form, userId, user]);
 
   const handleSubmit = useCallback(async () => {
     const [values] = await Promise.all([form.validateFields()]);
-    const { email, userName, roleIds } = values;
+    const { email, userName, roleNames } = values;
+    const roleIds = roles.reduce<string[]>(
+      (ids, role) => (roleNames.includes(role.name) ? [...ids, role.id] : ids),
+      []
+    );
     if (isCreate) {
       createUser({
         email,
@@ -71,7 +75,7 @@ const CreateUpdateUserModal = ({
         roleIds,
       });
     }
-  }, [isCreate, form, user, createUser, updateUser]);
+  }, [isCreate, form, user, roles, createUser, updateUser]);
 
   return (
     <Modal
@@ -118,16 +122,20 @@ const CreateUpdateUserModal = ({
           </Form.Item>
           <Form.Item
             label="Roles"
-            name="roleIds"
+            name="roleNames"
             rules={[
               { required: true, message: "At least 1 role is required!" },
             ]}
           >
             <Select
               mode="multiple"
+              className="antd-select"
               allowClear
               style={{ width: "100%" }}
-              placeholder="Please select at least 1 role"
+              size="large"
+              placeholder={
+                <span className="text-sm">Please select at least 1 role</span>
+              }
               options={roleOptions}
               loading={isLoadingRoles}
             />

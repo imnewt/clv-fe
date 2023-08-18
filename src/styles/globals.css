@@ -5,3 +5,11 @@
 body {
   margin: 0
 }
+
+.antd-select .ant-select-selection-item-content {
+  font-size: 0.75rem;
+}
+
+.antd-select .ant-select-selection-search-input {
+  font-size: 0.875rem;
+}

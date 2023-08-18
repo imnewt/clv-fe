@@ -32,11 +32,12 @@ const RoleTable = ({ data, isLoading, onEditButtonClick }: RoleTableProps) => {
       title: "Permissions",
       key: "permissions",
       dataIndex: "permissions",
+      width: "30rem",
       render: (permissions) => (
         <>
           {permissions.map((permission: Permission) => {
             return (
-              <Tag color="geekblue" key={permission.id}>
+              <Tag key={permission.id} color="green" className="my-1">
                 {permission.name}
               </Tag>
             );

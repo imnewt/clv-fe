@@ -23,7 +23,7 @@ const CreateUpdateUserModal = ({
     roleId,
     enabled: isOpen,
   });
-  const { permissions, isLoadingPermissions } = useGetAllPermissions({});
+  const { permissions = [], isLoadingPermissions } = useGetAllPermissions({});
 
   const handleClose = useCallback(() => {
     form.resetFields();
@@ -35,7 +35,7 @@ const CreateUpdateUserModal = ({
   const permissionOptions = useMemo(() => {
     return (
       permissions?.map((permission) => ({
-        value: permission.id,
+        value: permission.name,
         label: permission.name,
       })) || []
     );
@@ -52,14 +52,21 @@ const CreateUpdateUserModal = ({
     if (roleId && role) {
       form.setFieldsValue({
         name: role.name,
-        permissionIds: role.permissions.map((permission) => permission.id),
+        permissionNames: role.permissions.map((permission) => permission.name),
       });
     }
   }, [form, roleId, role]);
 
   const handleSubmit = useCallback(async () => {
     const [values] = await Promise.all([form.validateFields()]);
-    const { name, permissionIds } = values;
+    const { name, permissionNames } = values;
+    const permissionIds = permissions.reduce<string[]>(
+      (ids, permission) =>
+        permissionNames.includes(permission.name)
+          ? [...ids, permission.id]
+          : ids,
+      []
+    );
     if (isCreate) {
       createRole({
         name,
@@ -72,7 +79,7 @@ const CreateUpdateUserModal = ({
         permissionIds,
       });
     }
-  }, [isCreate, form, role, createRole, updateRole]);
+  }, [isCreate, form, role, permissions, createRole, updateRole]);
 
   return (
     <Modal
@@ -101,7 +108,7 @@ const CreateUpdateUserModal = ({
           </Form.Item>
           <Form.Item
             label="Permissions"
-            name="permissionIds"
+            name="permissionNames"
             rules={[
               {
                 required: true,
@@ -111,9 +118,15 @@ const CreateUpdateUserModal = ({
           >
             <Select
               mode="multiple"
+              className="antd-select"
               allowClear
               style={{ width: "100%" }}
-              placeholder="Please select at least 1 permission"
+              size="large"
+              placeholder={
+                <span className="text-sm">
+                  Please select at least 1 permission
+                </span>
+              }
               options={permissionOptions}
               loading={isLoadingPermissions}
             />
