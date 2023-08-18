@@ -20,7 +20,10 @@ const CreateUpdateUserModal = ({
   const [form] = useForm();
   const userNameWatch = useWatch("userName", form) || "";
 
-  const { user, isLoadingUserDetail } = useGetUserDetail(userId);
+  const { user, isLoadingUserDetail } = useGetUserDetail({
+    userId,
+    enabled: isOpen,
+  });
   const { roles, isLoadingRoles } = useGetAllRoles();
 
   const handleClose = useCallback(() => {

@@ -1,12 +1,17 @@
 import { useState } from "react";
 import { Typography, Button } from "antd";
 
+import { useGetAllUsers } from "@/hooks/users";
 import UserTable from "./components/UserTable";
 import CreateUpdateUserModal from "./components/CreateUpdateUserModal";
+import SearchBar from "./components/SearchBar";
 
 const UserManagement = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedUserId, setSelectedUserId] = useState<string>("");
+  const [searchTerm, setSearchTerm] = useState<string>("");
+
+  const { users = [], isLoadingUsers } = useGetAllUsers({ searchTerm });
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -25,11 +30,21 @@ const UserManagement = () => {
   return (
     <div>
       <Typography.Title level={3}>User Management</Typography.Title>
-      <Button className="bg-blue-500 !text-white" onClick={handleOpenModal}>
-        Create New
-      </Button>
+      <div className="flex">
+        <SearchBar onSetSearchTerm={setSearchTerm} />
+        <Button
+          className="bg-blue-500 !text-white ml-2"
+          onClick={handleOpenModal}
+        >
+          Create New
+        </Button>
+      </div>
       <div className="mt-4">
-        <UserTable onEditButtonClick={handleEditButtonClick} />
+        <UserTable
+          data={users}
+          isLoading={isLoadingUsers}
+          onEditButtonClick={handleEditButtonClick}
+        />
       </div>
       <CreateUpdateUserModal
         userId={selectedUserId}

@@ -5,14 +5,15 @@ import moment from "moment";
 
 import User from "@/models/User";
 import Role from "@/models/Role";
-import { useDeleteUser, useGetAllUsers } from "@/hooks/users";
+import { useDeleteUser } from "@/hooks/users";
 
 interface UserTableProps {
+  data: User[];
+  isLoading: boolean;
   onEditButtonClick: (userId: string) => void;
 }
 
-const UserTable = ({ onEditButtonClick }: UserTableProps) => {
-  const { users, isLoadingUsers } = useGetAllUsers();
+const UserTable = ({ data, isLoading, onEditButtonClick }: UserTableProps) => {
   const { deleteUser } = useDeleteUser({});
 
   const columns: ColumnsType<User> = [
@@ -87,8 +88,8 @@ const UserTable = ({ onEditButtonClick }: UserTableProps) => {
     <>
       <Table
         columns={columns}
-        dataSource={users}
-        loading={isLoadingUsers}
+        dataSource={data}
+        loading={isLoading}
         rowKey={(user) => user.id}
       />
     </>

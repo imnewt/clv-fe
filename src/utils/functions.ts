@@ -1,5 +1,7 @@
 import { Auth } from "@/models/Auth";
 import router from "next/router";
+import { isEmpty } from "lodash";
+
 import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from "./constants";
 
 export const isServer = typeof window === "undefined";
@@ -44,4 +46,28 @@ export const getRefreshToken = (): string => {
     return "";
   }
   return localStorage.getItem(REFRESH_TOKEN_KEY) || "";
+};
+
+export const isBlank = (value: any): boolean =>
+  typeof value !== "number" && isEmpty(value);
+
+export const requestParamsFromObject = (
+  params: Record<
+    string,
+    string[] | number[] | undefined | null | string | number | boolean
+  >
+): string => {
+  const joined = Object.keys(params)
+    .map((key) => {
+      if (Array.isArray(params[key])) {
+        return (params[key] as string[])
+          .map((o) => `${key}=${encodeURIComponent(o)}`)
+          .join("&");
+      }
+
+      return `${key}=${encodeURIComponent(params[key] as string)}`;
+    })
+    .join("&");
+
+  return isBlank(joined) ? "" : `?${joined}`;
 };

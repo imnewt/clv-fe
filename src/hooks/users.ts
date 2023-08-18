@@ -12,16 +12,26 @@ import {
 import User from "@/models/User";
 import { useShowError } from "@/utils/hooks";
 
-export const useGetAllUsers = () => {
-  const query = useQuery<User[]>(["get_all_users"], getAllUsers);
+export const useGetAllUsers = ({ searchTerm }: { searchTerm: string }) => {
+  const query = useQuery<User[]>(["get_all_users", searchTerm], () =>
+    getAllUsers({ searchTerm })
+  );
   return { users: query.data, isLoadingUsers: query.isLoading };
 };
 
-export const useGetUserDetail = (
-  userId: string
-): { user: User; isLoadingUserDetail: boolean } => {
-  const query = useQuery(["get_user_detail", userId], () =>
-    getUserDetail(userId)
+export const useGetUserDetail = ({
+  userId,
+  enabled,
+}: {
+  userId: string;
+  enabled: boolean;
+}): { user: User; isLoadingUserDetail: boolean } => {
+  const query = useQuery(
+    ["get_user_detail", userId],
+    () => getUserDetail(userId),
+    {
+      enabled,
+    }
   );
   return { user: query.data, isLoadingUserDetail: query.isLoading };
 };
