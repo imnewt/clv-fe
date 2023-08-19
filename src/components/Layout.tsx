@@ -5,6 +5,7 @@ import {
   TeamOutlined,
   ClusterOutlined,
   BranchesOutlined,
+  LogoutOutlined,
 } from "@ant-design/icons";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -13,6 +14,7 @@ import Link from "next/link";
 import Logo from "public/images/logo.png";
 import TransparentLogo from "public/images/logo-transparent.png";
 import { brandColor } from "@/utils/constants";
+import { logout } from "@/utils/functions";
 
 const { Header, Sider, Content } = Layout;
 
@@ -94,6 +96,16 @@ const MainLayout = ({ Component }: LayoutProps) => {
               <Link href={menuItem.path}>{menuItem.label}</Link>
             </Menu.Item>
           ))}
+          <Menu.ItemGroup>
+            <Menu.Item
+              key="/logout"
+              icon={<LogoutOutlined />}
+              className="text-white"
+              onClick={logout}
+            >
+              Logout
+            </Menu.Item>
+          </Menu.ItemGroup>
         </Menu>
       </Sider>
       <Layout>
