@@ -45,11 +45,12 @@ const UserTable = ({
       title: "Roles",
       key: "roles",
       dataIndex: "roles",
+      width: "20rem",
       render: (roles) => (
         <>
           {roles.map((role: Role) => {
             return (
-              <Tag color="geekblue" key={role.id}>
+              <Tag color="geekblue" key={role.id} className="my-1">
                 {role.name}
               </Tag>
             );

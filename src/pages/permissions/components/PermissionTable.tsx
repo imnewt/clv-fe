@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import { Table } from "antd";
+import { Table, Tag } from "antd";
 import { ColumnsType } from "antd/es/table";
 
 import Permission from "@/models/Permission";
@@ -28,6 +28,11 @@ const PermissionTable = ({
       title: "Name",
       dataIndex: "name",
       key: "name",
+      render: (name, permission) => (
+        <Tag key={permission.id} color="green">
+          {name}
+        </Tag>
+      ),
     },
   ];
 

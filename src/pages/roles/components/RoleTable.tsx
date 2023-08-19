@@ -41,7 +41,7 @@ const RoleTable = ({
       title: "Permissions",
       key: "permissions",
       dataIndex: "permissions",
-      width: "30rem",
+      width: "20rem",
       render: (permissions) => (
         <>
           {permissions.map((permission: Permission) => {

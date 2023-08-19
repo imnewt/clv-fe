@@ -49,7 +49,7 @@ const CreateUpdateUserModal = ({
       form.setFieldsValue({
         email: user.email,
         userName: user.userName,
-        roleIds: user.roles.map((role) => role.name),
+        roleNames: user.roles.map((role) => role.name),
       });
     }
   }, [form, userId, user]);
