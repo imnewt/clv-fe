@@ -1,7 +1,8 @@
 import { Filter } from "@/models/Filter";
 import { TablePaginationConfig } from "antd/lib/table";
 
-export const USER_SERVICE_HOST = "http://localhost:9002/api";
+export const API_BASE_URL = "http://localhost:9002/api";
+export const API_GATEWAY_URL = "http://localhost:9004";
 
 export const brandColor = "#110a3c";
 export const primaryColor = "#1890ff";

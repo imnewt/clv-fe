@@ -17,7 +17,7 @@ interface Config extends AxiosRequestConfig {
 
 const TIMEOUT = 30 * 60 * 1000;
 axios.defaults.timeout = TIMEOUT;
-axios.defaults.baseURL = process.env.BASE_API_URL;
+axios.defaults.baseURL = process.env.API_GATEWAY_URL;
 
 const setupAxiosInterceptors = (): void => {
   const onRequestSuccess = async (config: InternalAxiosRequestConfig) => {

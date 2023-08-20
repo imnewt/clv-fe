@@ -2,10 +2,10 @@ import Axios from "axios";
 
 import LoginRequest from "@/models/LoginRequest";
 import RegisterRequest from "@/models/RegisterRequest";
-import { USER_SERVICE_HOST } from "@/utils/constants";
+import { API_GATEWAY_URL, API_BASE_URL } from "@/utils/constants";
 
 export const login = async ({ email, password }: LoginRequest) => {
-  const response = await Axios.post(`${USER_SERVICE_HOST}/auth/login`, {
+  const response = await Axios.post(`${API_GATEWAY_URL}/auth/login`, {
     email,
     password,
   });
@@ -13,7 +13,7 @@ export const login = async ({ email, password }: LoginRequest) => {
 };
 
 export const loginWithGoogle = async () => {
-  window.location.href = `${USER_SERVICE_HOST}/auth/login/google`;
+  window.location.href = `${API_BASE_URL}/auth/login/google`;
 };
 
 export const register = async ({
@@ -21,7 +21,7 @@ export const register = async ({
   userName,
   password,
 }: RegisterRequest) => {
-  const response = await Axios.post(`${USER_SERVICE_HOST}/auth/register`, {
+  const response = await Axios.post(`${API_GATEWAY_URL}/auth/register`, {
     email,
     userName,
     password,
@@ -30,7 +30,7 @@ export const register = async ({
 };
 
 export const refreshToken = async (refreshToken: string) => {
-  const response = await Axios.post(`${USER_SERVICE_HOST}/auth/refresh-token`, {
+  const response = await Axios.post(`${API_GATEWAY_URL}/auth/refresh-token`, {
     refreshToken,
   });
   return response.data;
