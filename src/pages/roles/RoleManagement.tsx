@@ -7,10 +7,13 @@ import RoleTable from "./components/RoleTable";
 import CreateUpdateRoleModal from "./components/CreateUpdateRoleModal";
 import { SearchBar } from "@/components";
 import {
+  CREATE_ROLE,
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
   DEFAULT_PAGINATION,
+  DELETE_ROLE,
   READ_ROLE,
+  UPDATE_ROLE,
 } from "@/utils/constants";
 import { getCurrentUser } from "@/utils/functions";
 import { useGetUserPermissions } from "@/hooks/permissions";
@@ -41,6 +44,18 @@ const RoleManagement = () => {
 
   const haveReadRolePermission = useMemo(
     () => userPermissions.includes(READ_ROLE),
+    [userPermissions]
+  );
+  const haveCreateRolePermission = useMemo(
+    () => userPermissions.includes(CREATE_ROLE),
+    [userPermissions]
+  );
+  const haveUpdateRolePermission = useMemo(
+    () => userPermissions.includes(UPDATE_ROLE),
+    [userPermissions]
+  );
+  const haveDeleteRolePermission = useMemo(
+    () => userPermissions.includes(DELETE_ROLE),
     [userPermissions]
   );
 
@@ -76,22 +91,28 @@ const RoleManagement = () => {
     <Spin spinning={isLoadingUserPermissions}>
       <Typography.Title level={3}>Role Management</Typography.Title>
       <div className="flex">
-        <SearchBar
-          placeholder="Search by role name"
-          onSetSearchTerm={setSearchTerm}
-        />
-        <Button
-          className="bg-blue-500 !text-white ml-2"
-          onClick={handleOpenModal}
-        >
-          Create New
-        </Button>
+        <div className="w-64">
+          <SearchBar
+            placeholder="Search by role name"
+            onSetSearchTerm={setSearchTerm}
+          />
+        </div>
+        {haveCreateRolePermission && (
+          <Button
+            className="bg-blue-500 !text-white ml-2"
+            onClick={handleOpenModal}
+          >
+            Create New
+          </Button>
+        )}
       </div>
       <div className="mt-4">
         <RoleTable
           data={roles}
           isLoading={isLoadingRoles}
           pagination={tablePagination}
+          canUpdate={haveUpdateRolePermission}
+          canDelete={haveDeleteRolePermission}
           onSetPagination={setPagination}
           onEditButtonClick={handleEditButtonClick}
         />

@@ -7,10 +7,13 @@ import UserTable from "./components/UserTable";
 import CreateUpdateUserModal from "./components/CreateUpdateUserModal";
 import { SearchBar } from "@/components";
 import {
+  CREATE_USER,
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
   DEFAULT_PAGINATION,
+  DELETE_USER,
   READ_USER,
+  UPDATE_USER,
 } from "@/utils/constants";
 import { getCurrentUser } from "@/utils/functions";
 import { useGetUserPermissions } from "@/hooks/permissions";
@@ -40,6 +43,18 @@ const UserManagement = () => {
 
   const haveReadUserPermission = useMemo(
     () => userPermissions.includes(READ_USER),
+    [userPermissions]
+  );
+  const haveCreateUserPermission = useMemo(
+    () => userPermissions.includes(CREATE_USER),
+    [userPermissions]
+  );
+  const haveUpdateUserPermission = useMemo(
+    () => userPermissions.includes(UPDATE_USER),
+    [userPermissions]
+  );
+  const haveDeleteUserPermission = useMemo(
+    () => userPermissions.includes(DELETE_USER),
     [userPermissions]
   );
 
@@ -75,22 +90,28 @@ const UserManagement = () => {
     <Spin spinning={isLoadingUserPermissions}>
       <Typography.Title level={3}>User Management</Typography.Title>
       <div className="flex">
-        <SearchBar
-          placeholder="Search by username, email"
-          onSetSearchTerm={setSearchTerm}
-        />
-        <Button
-          className="bg-blue-500 !text-white ml-2"
-          onClick={handleOpenModal}
-        >
-          Create New
-        </Button>
+        <div className="w-64">
+          <SearchBar
+            placeholder="Search by username, email"
+            onSetSearchTerm={setSearchTerm}
+          />
+        </div>
+        {haveCreateUserPermission && (
+          <Button
+            className="bg-blue-500 !text-white ml-2"
+            onClick={handleOpenModal}
+          >
+            Create New
+          </Button>
+        )}
       </div>
       <div className="mt-4">
         <UserTable
           data={users}
           isLoading={isLoadingUsers}
           pagination={tablePagination}
+          canUpdate={haveUpdateUserPermission}
+          canDelete={haveDeleteUserPermission}
           onSetPagination={setPagination}
           onEditButtonClick={handleEditButtonClick}
         />

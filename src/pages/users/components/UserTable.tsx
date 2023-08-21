@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import { Popconfirm, Space, Table, Tag } from "antd";
+import { Popconfirm, Space, Table, Tag, Tooltip } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { ColumnsType, TablePaginationConfig } from "antd/lib/table";
 import moment from "moment";
@@ -12,6 +12,8 @@ interface UserTableProps {
   data: User[];
   isLoading: boolean;
   pagination: TablePaginationConfig;
+  canUpdate: boolean;
+  canDelete: boolean;
   onSetPagination: Dispatch<SetStateAction<TablePaginationConfig>>;
   onEditButtonClick: (userId: string) => void;
 }
@@ -20,6 +22,8 @@ const UserTable = ({
   data,
   isLoading,
   pagination,
+  canUpdate,
+  canDelete,
   onSetPagination,
   onEditButtonClick,
 }: UserTableProps) => {
@@ -76,19 +80,31 @@ const UserTable = ({
       dataIndex: "id",
       render: (id) => (
         <Space>
-          <EditOutlined
-            className="hover:text-primary mr-2"
-            onClick={() => onEditButtonClick(id)}
-          />
-          <Popconfirm
-            title="Are you sure you want to delete this user?"
-            onConfirm={() => deleteUser({ userId: id })}
-            okText="Yes"
-            cancelText="No"
-            okType="danger"
-          >
-            <DeleteOutlined className="hover:text-primary" />
-          </Popconfirm>
+          {canUpdate ? (
+            <EditOutlined
+              className="hover:text-primary mr-2"
+              onClick={() => onEditButtonClick(id)}
+            />
+          ) : (
+            <Tooltip title="You don't have permission to update users!">
+              <EditOutlined className=" !text-gray-300 cursor-not-allowed mr-2" />
+            </Tooltip>
+          )}
+          {canDelete ? (
+            <Popconfirm
+              title="Are you sure you want to delete this user?"
+              onConfirm={() => deleteUser({ userId: id })}
+              okText="Yes"
+              cancelText="No"
+              okType="danger"
+            >
+              <DeleteOutlined className="hover:text-primary" />
+            </Popconfirm>
+          ) : (
+            <Tooltip title="You don't have permission to delete users!">
+              <DeleteOutlined className="!text-gray-300 cursor-not-allowed" />
+            </Tooltip>
+          )}
         </Space>
       ),
     },

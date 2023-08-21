@@ -1,5 +1,12 @@
 import { Dispatch, SetStateAction } from "react";
-import { Popconfirm, Space, Table, Tag, TablePaginationConfig } from "antd";
+import {
+  Popconfirm,
+  Space,
+  Table,
+  Tag,
+  TablePaginationConfig,
+  Tooltip,
+} from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { ColumnsType } from "antd/es/table";
 import moment from "moment";
@@ -13,6 +20,8 @@ interface RoleTableProps {
   data: Role[];
   isLoading: boolean;
   pagination: TablePaginationConfig;
+  canUpdate: boolean;
+  canDelete: boolean;
   onSetPagination: Dispatch<SetStateAction<TablePaginationConfig>>;
   onEditButtonClick: (userId: string) => void;
 }
@@ -21,6 +30,8 @@ const RoleTable = ({
   data,
   isLoading,
   pagination,
+  canUpdate,
+  canDelete,
   onSetPagination,
   onEditButtonClick,
 }: RoleTableProps) => {
@@ -74,24 +85,40 @@ const RoleTable = ({
       render: (roleId) =>
         [ADMIN_ROLE_ID, USER_ROLE_ID].includes(roleId) ? (
           <Space>
-            <EditOutlined className="!text-gray-300 !cursor-not-allowed mr-2" />
-            <DeleteOutlined className="!text-gray-300 !cursor-not-allowed" />
+            <Tooltip title="You can't update this role!">
+              <EditOutlined className="!text-gray-300 !cursor-not-allowed mr-2" />
+            </Tooltip>
+            <Tooltip title="You can't delete this role!">
+              <DeleteOutlined className="!text-gray-300 !cursor-not-allowed" />
+            </Tooltip>
           </Space>
         ) : (
           <Space>
-            <EditOutlined
-              className="hover:text-primary mr-2"
-              onClick={() => onEditButtonClick(roleId)}
-            />
-            <Popconfirm
-              title="Are you sure you want to delete this role?"
-              onConfirm={() => deleteRole({ roleId })}
-              okText="Yes"
-              cancelText="No"
-              okType="danger"
-            >
-              <DeleteOutlined className="!hover:text-primary" />
-            </Popconfirm>
+            {canUpdate ? (
+              <EditOutlined
+                className="hover:text-primary mr-2"
+                onClick={() => onEditButtonClick(roleId)}
+              />
+            ) : (
+              <Tooltip title="You don't have permission to update roles!">
+                <EditOutlined className=" !text-gray-300 cursor-not-allowed mr-2" />
+              </Tooltip>
+            )}
+            {canDelete ? (
+              <Popconfirm
+                title="Are you sure you want to delete this role?"
+                onConfirm={() => deleteRole({ roleId })}
+                okText="Yes"
+                cancelText="No"
+                okType="danger"
+              >
+                <DeleteOutlined className="!hover:text-primary" />
+              </Popconfirm>
+            ) : (
+              <Tooltip title="You don't have permission to delete roles!">
+                <DeleteOutlined className="!text-gray-300 cursor-not-allowed" />
+              </Tooltip>
+            )}
           </Space>
         ),
     },

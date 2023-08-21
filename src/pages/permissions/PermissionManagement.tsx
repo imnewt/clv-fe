@@ -60,10 +60,12 @@ const PermissionManagement = () => {
   return (
     <Spin spinning={isLoadingUserPermissions}>
       <Typography.Title level={3}>Permission Management</Typography.Title>
-      <SearchBar
-        placeholder="Search by permission name"
-        onSetSearchTerm={setSearchTerm}
-      />
+      <div className="w-64">
+        <SearchBar
+          placeholder="Search by permission name"
+          onSetSearchTerm={setSearchTerm}
+        />
+      </div>
       <div className="mt-4">
         <PermissionTable
           data={permissions}
