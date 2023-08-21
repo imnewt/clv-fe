@@ -42,7 +42,7 @@ const MainLayout = ({ Component }: LayoutProps) => {
   const { userPermissions = [] } = useGetUserPermissions(currentUserId);
 
   const showUserManagement = useMemo(
-    () => userPermissions.includes(READ_USER) || true,
+    () => userPermissions.includes(READ_USER),
     [userPermissions]
   );
   const showRoleManagement = useMemo(

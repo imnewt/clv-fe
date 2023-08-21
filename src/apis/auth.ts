@@ -35,3 +35,24 @@ export const refreshToken = async (refreshToken: string) => {
   });
   return response.data;
 };
+
+export const sendResetPasswordRequest = async (email: string) => {
+  const response = await Axios.post(`${API_GATEWAY_URL}/auth/forgot-password`, {
+    email,
+  });
+  return response.data;
+};
+
+export const resetPassword = async ({
+  resetToken,
+  newPassword,
+}: {
+  resetToken: string;
+  newPassword: string;
+}) => {
+  const response = await Axios.post(`${API_GATEWAY_URL}/auth/reset-password`, {
+    resetToken,
+    newPassword,
+  });
+  return response.data;
+};
