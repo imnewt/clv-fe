@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig, InternalAxiosRequestConfig } from "axios";
+import axios, { InternalAxiosRequestConfig } from "axios";
 import { get } from "lodash";
 
 import {
@@ -7,17 +7,38 @@ import {
   logout,
   setAuth,
 } from "@/utils/functions";
-import { Auth } from "@/models/Auth";
-import { refreshToken as doRefreshToken } from "@/apis/auth";
-import { INVALID_REFRESH_TOKEN } from "@/utils/constants";
+import { API_GATEWAY_URL, INVALID_REFRESH_TOKEN } from "@/utils/constants";
 
-interface Config extends AxiosRequestConfig {
-  _retry: boolean;
+const axiosInstance = axios.create({
+  baseURL: process.env.API_GATEWAY_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+async function refreshAccessToken() {
+  try {
+    const refreshToken = getRefreshToken();
+    const response = await axiosInstance.post(
+      `${API_GATEWAY_URL}/auth/refresh-token`,
+      {
+        refreshToken,
+      }
+    );
+    const auth = response.data;
+    setAuth(auth);
+    const { accessToken } = auth;
+    axiosInstance.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${accessToken}`;
+    return accessToken;
+  } catch (error) {
+    throw error;
+  }
 }
 
-const TIMEOUT = 30 * 60 * 1000;
-axios.defaults.timeout = TIMEOUT;
-axios.defaults.baseURL = process.env.API_GATEWAY_URL;
+let isRefreshing = false;
+let failedRequestsQueue = [];
 
 const setupAxiosInterceptors = (): void => {
   const onRequestSuccess = async (config: InternalAxiosRequestConfig) => {
@@ -37,27 +58,40 @@ const setupAxiosInterceptors = (): void => {
   const onResponseSuccess = (response: any) => {
     return response;
   };
-  const onResponseError = (err: any) => {
-    const errorMessage = get(err, "response.data.message") || "";
+  const onResponseError = async (error: any) => {
+    const errorMessage = get(error, "response.data.message") || "";
     if (errorMessage === INVALID_REFRESH_TOKEN) {
       return logout();
     }
-
-    const status = err.status || get(err, "response.status");
-    const originalRequest = err.config as Config;
-
-    if ((status === 403 || status === 401) && !originalRequest._retry) {
-      const refreshToken = getRefreshToken();
-      originalRequest._retry = true;
-      return new Promise(async (resolve, _) => {
-        try {
-          const auth: Auth = await doRefreshToken(refreshToken);
-          if (!auth || !auth.accessToken) return logout();
-          setAuth(auth);
-        } catch (_) {}
-      });
+    const originalRequest = error.config;
+    if (
+      error.response &&
+      (error.response.status === 401 || error.response.status === 403)
+    ) {
+      if (!isRefreshing) {
+        isRefreshing = true;
+        const newAccessToken = await refreshAccessToken();
+        originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
+        return axiosInstance(originalRequest)
+          .then((response) => {
+            isRefreshing = false;
+            return response;
+          })
+          .catch((error) => {
+            return Promise.reject(error);
+          });
+      } else {
+        return new Promise((resolve, reject) => {
+          failedRequestsQueue.push((newAccessToken: string) => {
+            originalRequest.headers[
+              "Authorization"
+            ] = `Bearer ${newAccessToken}`;
+            resolve(axiosInstance(originalRequest));
+          });
+        });
+      }
     }
-    return Promise.reject(err);
+    return Promise.reject(error);
   };
 
   axios.interceptors.request.use(onRequestSuccess);
