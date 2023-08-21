@@ -1,13 +1,15 @@
-import { Auth } from "@/models/Auth";
 import router from "next/router";
 import { isEmpty } from "lodash";
 
-import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from "./constants";
+import { Auth } from "@/models/Auth";
+
+import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY, CURRENT_USER } from "./constants";
 
 export const isServer = typeof window === "undefined";
 
 export const logout = () => {
   removeAuth();
+  removeCurrentUser();
   router.push("/login");
 };
 
@@ -46,6 +48,27 @@ export const getRefreshToken = (): string => {
     return "";
   }
   return localStorage.getItem(REFRESH_TOKEN_KEY) || "";
+};
+
+export const setCurrentUser = (userId: string) => {
+  if (isServer) {
+    return;
+  }
+  localStorage.setItem(CURRENT_USER, userId);
+};
+
+export const removeCurrentUser = () => {
+  if (isServer) {
+    return;
+  }
+  localStorage.removeItem(CURRENT_USER);
+};
+
+export const getCurrentUser = (): string => {
+  if (isServer) {
+    return "";
+  }
+  return localStorage.getItem(CURRENT_USER) || "";
 };
 
 export const isBlank = (value: any): boolean =>

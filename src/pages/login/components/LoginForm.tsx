@@ -10,7 +10,7 @@ import { get } from "lodash";
 import { brandColor } from "@/utils/constants";
 import { login } from "@/apis/auth";
 import { GoogleButton } from "@/components";
-import { setAuth } from "@/utils/functions";
+import { setAuth, setCurrentUser } from "@/utils/functions";
 
 const Context = React.createContext({ name: "Default" });
 
@@ -31,7 +31,7 @@ const LoginForm = () => {
       message: `Login Success!`,
     });
     setTimeout(() => {
-      router.push("/users");
+      router.push("/dashboard");
     }, 1000);
   }, [notificationApi, router]);
 
@@ -47,8 +47,9 @@ const LoginForm = () => {
 
   const { mutate: mutateLogin, isLoading } = useMutation(login, {
     onSuccess: (data) => {
-      const { accessToken, refreshToken } = data;
+      const { accessToken, refreshToken, userId } = data;
       setAuth({ accessToken, refreshToken });
+      setCurrentUser(userId);
       handleLoginSuccess();
     },
     onError: (err: Error) => {

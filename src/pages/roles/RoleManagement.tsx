@@ -1,7 +1,8 @@
-import { useState, useMemo } from "react";
-import { Typography, Button, TablePaginationConfig } from "antd";
+import { useState, useMemo, useEffect } from "react";
+import { Typography, Button, TablePaginationConfig, Spin } from "antd";
+import { useRouter } from "next/router";
+import { isEmpty } from "lodash";
 
-import { useGetAllRoles } from "@/hooks/roles";
 import RoleTable from "./components/RoleTable";
 import CreateUpdateRoleModal from "./components/CreateUpdateRoleModal";
 import { SearchBar } from "@/components";
@@ -9,9 +10,16 @@ import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
   DEFAULT_PAGINATION,
+  READ_ROLE,
 } from "@/utils/constants";
+import { getCurrentUser } from "@/utils/functions";
+import { useGetUserPermissions } from "@/hooks/permissions";
+import { useGetAllRoles } from "@/hooks/roles";
 
 const RoleManagement = () => {
+  const router = useRouter();
+  const currentUserId = getCurrentUser();
+
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedRoleId, setSelectedRoleId] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -27,6 +35,24 @@ const RoleManagement = () => {
     pageNumber: pagination.current || DEFAULT_PAGE_NUMBER,
     pageSize: pagination.pageSize || DEFAULT_PAGE_SIZE,
   });
+
+  const { userPermissions, isLoadingUserPermissions } =
+    useGetUserPermissions(currentUserId);
+
+  const haveReadRolePermission = useMemo(
+    () => userPermissions.includes(READ_ROLE),
+    [userPermissions]
+  );
+
+  useEffect(() => {
+    if (
+      router.pathname === "/roles" &&
+      !isEmpty(userPermissions) &&
+      !haveReadRolePermission
+    ) {
+      router.push("/not-found");
+    }
+  }, [router, userPermissions, haveReadRolePermission]);
 
   const tablePagination = useMemo(() => {
     return { ...pagination, total };
@@ -47,7 +73,7 @@ const RoleManagement = () => {
   };
 
   return (
-    <div>
+    <Spin spinning={isLoadingUserPermissions}>
       <Typography.Title level={3}>Role Management</Typography.Title>
       <div className="flex">
         <SearchBar
@@ -75,7 +101,7 @@ const RoleManagement = () => {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
       />
-    </div>
+    </Spin>
   );
 };
 

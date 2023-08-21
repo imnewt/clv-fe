@@ -6,6 +6,7 @@ import {
   ClusterOutlined,
   BranchesOutlined,
   LogoutOutlined,
+  DashboardOutlined,
 } from "@ant-design/icons";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -13,8 +14,14 @@ import Link from "next/link";
 
 import Logo from "public/images/logo.png";
 import TransparentLogo from "public/images/logo-transparent.png";
-import { brandColor } from "@/utils/constants";
-import { logout } from "@/utils/functions";
+import {
+  brandColor,
+  READ_PERMISSION,
+  READ_ROLE,
+  READ_USER,
+} from "@/utils/constants";
+import { getCurrentUser, logout } from "@/utils/functions";
+import { useGetUserPermissions } from "@/hooks/permissions";
 
 const { Header, Sider, Content } = Layout;
 
@@ -22,41 +29,30 @@ interface LayoutProps {
   Component: React.FC;
 }
 
-const menu = [
-  {
-    key: "users",
-    label: "User Management",
-    icon: <TeamOutlined />,
-    path: "/users",
-  },
-  {
-    key: "roles",
-    label: "Role Management",
-    icon: <ClusterOutlined />,
-    path: "/roles",
-  },
-  {
-    key: "permissions",
-    label: "Permission Management",
-    icon: <BranchesOutlined />,
-    path: "/permissions",
-  },
-  {
-    key: "settings",
-    label: "Settings",
-    icon: <SettingOutlined />,
-    path: "/settings",
-  },
-];
-
 const MainLayout = ({ Component }: LayoutProps) => {
   const router = useRouter();
+  const currentUserId = getCurrentUser();
   const {
     token: { colorBgContainer },
   } = theme.useToken();
 
   const [collapsed, setCollapsed] = useState<boolean>(false);
   const [mounted, setMounted] = useState<boolean>(false);
+
+  const { userPermissions = [] } = useGetUserPermissions(currentUserId);
+
+  const showUserManagement = useMemo(
+    () => userPermissions.includes(READ_USER) || true,
+    [userPermissions]
+  );
+  const showRoleManagement = useMemo(
+    () => userPermissions.includes(READ_ROLE),
+    [userPermissions]
+  );
+  const showPermissionManagement = useMemo(
+    () => userPermissions.includes(READ_PERMISSION),
+    [userPermissions]
+  );
 
   useEffect(() => {
     setMounted(true);
@@ -87,15 +83,47 @@ const MainLayout = ({ Component }: LayoutProps) => {
           style={{ background: "transparent" }}
           defaultSelectedKeys={[selectedMenu]}
         >
-          {menu.map((menuItem) => (
+          <Menu.Item
+            key="dashboard"
+            icon={<DashboardOutlined />}
+            className="text-white"
+          >
+            <Link href="/dashboard">Dashboard</Link>
+          </Menu.Item>
+          {showUserManagement && (
             <Menu.Item
-              key={menuItem.key}
-              icon={menuItem.icon}
+              key="users"
+              icon={<TeamOutlined />}
               className="text-white"
             >
-              <Link href={menuItem.path}>{menuItem.label}</Link>
+              <Link href="/users">User Management</Link>
             </Menu.Item>
-          ))}
+          )}
+          {showRoleManagement && (
+            <Menu.Item
+              key="roles"
+              icon={<ClusterOutlined />}
+              className="text-white"
+            >
+              <Link href="/roles">Role Management</Link>
+            </Menu.Item>
+          )}
+          {showPermissionManagement && (
+            <Menu.Item
+              key="permissions"
+              icon={<BranchesOutlined />}
+              className="text-white"
+            >
+              <Link href="/permissions">Permission Management</Link>
+            </Menu.Item>
+          )}
+          <Menu.Item
+            key="settings"
+            icon={<SettingOutlined />}
+            className="text-white"
+          >
+            <Link href="/settings">Settings</Link>
+          </Menu.Item>
           <Menu.ItemGroup>
             <Menu.Item
               key="/logout"

@@ -28,10 +28,10 @@ export const useGetAllUsers = (filter: Filter = DEFAULT_FILTER) => {
 
 export const useGetUserDetail = ({
   userId,
-  enabled,
+  enabled = true,
 }: {
   userId: string;
-  enabled: boolean;
+  enabled?: boolean;
 }): { user: User; isLoadingUserDetail: boolean } => {
   const query = useQuery(
     ["get_user_detail", userId],

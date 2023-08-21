@@ -10,3 +10,10 @@ export const getAllPermissions = async (filter: Filter) => {
   );
   return response.data;
 };
+
+export const getUserPermissions = async (userId: string) => {
+  const response = await Axios.get(
+    `${API_GATEWAY_URL}/users/${userId}/permissions`
+  );
+  return response.data;
+};

@@ -1,27 +1,32 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 
-import { setAuth } from "@/utils/functions";
+import { isLoggedIn, setAuth, setCurrentUser } from "@/utils/functions";
 
 const Home = () => {
+  const loggedIn = isLoggedIn();
   const router = useRouter();
 
   useEffect(() => {
     const { query } = router;
-    const { accessToken, refreshToken } = query;
-    if (accessToken && refreshToken) {
+    const { accessToken, refreshToken, userId } = query;
+    if (accessToken && refreshToken && userId) {
       setAuth({
         accessToken: accessToken as string,
         refreshToken: refreshToken as string,
       });
+      setCurrentUser(userId as string);
       router.replace({
-        pathname: "/users",
+        pathname: "/dashboard",
         query: {},
       });
-    } else {
-      router.push("/login");
     }
   }, [router]);
+
+  useEffect(() => {
+    if (!loggedIn) router.push("/login");
+    else router.push("/dashboard");
+  }, [loggedIn, router]);
 
   return null;
 };

@@ -1,7 +1,8 @@
-import { useState, useMemo } from "react";
-import { Typography, Button, TablePaginationConfig } from "antd";
+import { useState, useMemo, useEffect } from "react";
+import { Typography, Button, TablePaginationConfig, Spin } from "antd";
+import { useRouter } from "next/router";
+import { isEmpty } from "lodash";
 
-import { useGetAllUsers } from "@/hooks/users";
 import UserTable from "./components/UserTable";
 import CreateUpdateUserModal from "./components/CreateUpdateUserModal";
 import { SearchBar } from "@/components";
@@ -9,9 +10,16 @@ import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
   DEFAULT_PAGINATION,
+  READ_USER,
 } from "@/utils/constants";
+import { getCurrentUser } from "@/utils/functions";
+import { useGetUserPermissions } from "@/hooks/permissions";
+import { useGetAllUsers } from "@/hooks/users";
 
 const UserManagement = () => {
+  const router = useRouter();
+  const currentUserId = getCurrentUser();
+
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedUserId, setSelectedUserId] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -27,10 +35,27 @@ const UserManagement = () => {
     pageNumber: pagination.current || DEFAULT_PAGE_NUMBER,
     pageSize: pagination.pageSize || DEFAULT_PAGE_SIZE,
   });
+  const { userPermissions, isLoadingUserPermissions } =
+    useGetUserPermissions(currentUserId);
+
+  const haveReadUserPermission = useMemo(
+    () => userPermissions.includes(READ_USER),
+    [userPermissions]
+  );
 
   const tablePagination = useMemo(() => {
     return { ...pagination, total };
   }, [pagination, total]);
+
+  useEffect(() => {
+    if (
+      router.pathname === "/users" &&
+      !isEmpty(userPermissions) &&
+      !haveReadUserPermission
+    ) {
+      router.push("/not-found");
+    }
+  }, [router, userPermissions, haveReadUserPermission]);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -47,7 +72,7 @@ const UserManagement = () => {
   };
 
   return (
-    <div>
+    <Spin spinning={isLoadingUserPermissions}>
       <Typography.Title level={3}>User Management</Typography.Title>
       <div className="flex">
         <SearchBar
@@ -75,7 +100,7 @@ const UserManagement = () => {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
       />
-    </div>
+    </Spin>
   );
 };
 
