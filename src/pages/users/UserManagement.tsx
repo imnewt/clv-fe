@@ -7,13 +7,10 @@ import UserTable from "./components/UserTable";
 import CreateUpdateUserModal from "./components/CreateUpdateUserModal";
 import { SearchBar } from "@/components";
 import {
-  CREATE_USER,
+  PERMISSION,
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
   DEFAULT_PAGINATION,
-  DELETE_USER,
-  READ_USER,
-  UPDATE_USER,
 } from "@/utils/constants";
 import { getCurrentUser } from "@/utils/functions";
 import { useGetUserPermissions } from "@/hooks/permissions";
@@ -42,19 +39,19 @@ const UserManagement = () => {
     useGetUserPermissions(currentUserId);
 
   const haveReadUserPermission = useMemo(
-    () => userPermissions.includes(READ_USER),
+    () => userPermissions.includes(PERMISSION.READ_USER),
     [userPermissions]
   );
   const haveCreateUserPermission = useMemo(
-    () => userPermissions.includes(CREATE_USER),
+    () => userPermissions.includes(PERMISSION.CREATE_USER),
     [userPermissions]
   );
   const haveUpdateUserPermission = useMemo(
-    () => userPermissions.includes(UPDATE_USER),
+    () => userPermissions.includes(PERMISSION.UPDATE_USER),
     [userPermissions]
   );
   const haveDeleteUserPermission = useMemo(
-    () => userPermissions.includes(DELETE_USER),
+    () => userPermissions.includes(PERMISSION.DELETE_USER),
     [userPermissions]
   );
 

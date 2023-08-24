@@ -3,98 +3,98 @@ import { Typography, Button, TablePaginationConfig, Spin } from "antd";
 import { useRouter } from "next/router";
 import { isEmpty } from "lodash";
 
-import RoleTable from "./components/RoleTable";
-import CreateUpdateRoleModal from "./components/CreateUpdateRoleModal";
+import VesselTable from "./components/VesselTable";
+// import CreateUpdateUserModal from "./components/CreateUpdateUserModal";
 import { SearchBar } from "@/components";
 import {
-  PERMISSION,
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
   DEFAULT_PAGINATION,
+  PERMISSION,
 } from "@/utils/constants";
 import { getCurrentUser } from "@/utils/functions";
 import { useGetUserPermissions } from "@/hooks/permissions";
-import { useGetAllRoles } from "@/hooks/roles";
+import { useGetAllVessels } from "@/hooks/vessels";
 
-const RoleManagement = () => {
+const VesselManagement = () => {
   const router = useRouter();
   const currentUserId = getCurrentUser();
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [selectedRoleId, setSelectedRoleId] = useState<string>("");
+  const [selectedUserId, setSelectedUserId] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [pagination, setPagination] =
     useState<TablePaginationConfig>(DEFAULT_PAGINATION);
 
   const {
-    roles = [],
+    vessels = [],
     total,
-    isLoadingRoles,
-  } = useGetAllRoles({
+    isLoadingVessels,
+  } = useGetAllVessels({
     searchTerm,
     pageNumber: pagination.current || DEFAULT_PAGE_NUMBER,
     pageSize: pagination.pageSize || DEFAULT_PAGE_SIZE,
   });
-
+  console.log("vessels", vessels);
   const { userPermissions, isLoadingUserPermissions } =
     useGetUserPermissions(currentUserId);
 
-  const haveReadRolePermission = useMemo(
-    () => userPermissions.includes(PERMISSION.READ_ROLE),
+  const haveReadVesselPermission = useMemo(
+    () => userPermissions.includes(PERMISSION.READ_VESSEL),
     [userPermissions]
   );
-  const haveCreateRolePermission = useMemo(
-    () => userPermissions.includes(PERMISSION.CREATE_ROLE),
+  const haveCreateVesselPermission = useMemo(
+    () => userPermissions.includes(PERMISSION.CREATE_VESSEL),
     [userPermissions]
   );
-  const haveUpdateRolePermission = useMemo(
-    () => userPermissions.includes(PERMISSION.UPDATE_ROLE),
+  const haveUpdateVesselPermission = useMemo(
+    () => userPermissions.includes(PERMISSION.UPDATE_VESSEL),
     [userPermissions]
   );
-  const haveDeleteRolePermission = useMemo(
-    () => userPermissions.includes(PERMISSION.DELETE_ROLE),
+  const haveDeleteVesselPermission = useMemo(
+    () => userPermissions.includes(PERMISSION.DELETE_VESSEL),
     [userPermissions]
   );
-
-  useEffect(() => {
-    if (
-      router.pathname === "/roles" &&
-      !isEmpty(userPermissions) &&
-      !haveReadRolePermission
-    ) {
-      router.push("/not-found");
-    }
-  }, [router, userPermissions, haveReadRolePermission]);
 
   const tablePagination = useMemo(() => {
     return { ...pagination, total };
   }, [pagination, total]);
 
+  useEffect(() => {
+    if (
+      router.pathname === "/vessels" &&
+      !isEmpty(userPermissions) &&
+      !haveReadVesselPermission
+    ) {
+      router.push("/not-found");
+    }
+  }, [router, userPermissions, haveReadVesselPermission]);
+
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
 
-  const handleEditButtonClick = (roleId: string): void => {
-    setSelectedRoleId(roleId);
+  const handleEditButtonClick = (userId: string) => {
+    setSelectedUserId(userId);
     handleOpenModal();
   };
 
-  const handleCloseModal = (): void => {
+  const handleCloseModal = () => {
     setIsModalOpen(false);
-    setSelectedRoleId("");
+    setSelectedUserId("");
   };
 
   return (
     <Spin spinning={isLoadingUserPermissions}>
-      <Typography.Title level={3}>Role Management</Typography.Title>
+      <Typography.Title level={3}>Vessel Management</Typography.Title>
       <div className="flex">
         <div className="w-64">
           <SearchBar
-            placeholder="Search by role name"
+            placeholder="Search by vessel name"
             onSetSearchTerm={setSearchTerm}
           />
         </div>
-        {haveCreateRolePermission && (
+        {haveCreateVesselPermission && (
           <Button
             className="bg-blue-500 !text-white ml-2"
             onClick={handleOpenModal}
@@ -104,23 +104,23 @@ const RoleManagement = () => {
         )}
       </div>
       <div className="mt-4">
-        <RoleTable
-          data={roles}
-          isLoading={isLoadingRoles}
+        <VesselTable
+          data={vessels}
+          isLoading={isLoadingVessels}
           pagination={tablePagination}
-          canUpdate={haveUpdateRolePermission}
-          canDelete={haveDeleteRolePermission}
+          canUpdate={haveUpdateVesselPermission}
+          canDelete={haveDeleteVesselPermission}
           onSetPagination={setPagination}
           onEditButtonClick={handleEditButtonClick}
         />
       </div>
-      <CreateUpdateRoleModal
-        roleId={selectedRoleId}
+      {/* <CreateUpdateUserModal
+        userId={selectedUserId}
         isOpen={isModalOpen}
         onClose={handleCloseModal}
-      />
+      /> */}
     </Spin>
   );
 };
 
-export default RoleManagement;
+export default VesselManagement;

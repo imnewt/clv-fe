@@ -9,7 +9,7 @@ import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
   DEFAULT_PAGINATION,
-  READ_PERMISSION,
+  PERMISSION,
 } from "@/utils/constants";
 import { getCurrentUser } from "@/utils/functions";
 import {
@@ -39,7 +39,7 @@ const PermissionManagement = () => {
     useGetUserPermissions(currentUserId);
 
   const haveReadPermissionPermission = useMemo(
-    () => userPermissions.includes(READ_PERMISSION),
+    () => userPermissions.includes(PERMISSION.READ_PERMISSION),
     [userPermissions]
   );
 

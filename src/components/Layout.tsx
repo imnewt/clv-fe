@@ -7,6 +7,7 @@ import {
   BranchesOutlined,
   LogoutOutlined,
   DashboardOutlined,
+  GlobalOutlined,
 } from "@ant-design/icons";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -14,12 +15,7 @@ import Link from "next/link";
 
 import Logo from "public/images/logo.png";
 import TransparentLogo from "public/images/logo-transparent.png";
-import {
-  brandColor,
-  READ_PERMISSION,
-  READ_ROLE,
-  READ_USER,
-} from "@/utils/constants";
+import { brandColor, PERMISSION } from "@/utils/constants";
 import { getCurrentUser, logout } from "@/utils/functions";
 import { useGetUserPermissions } from "@/hooks/permissions";
 
@@ -41,16 +37,20 @@ const MainLayout = ({ Component }: LayoutProps) => {
 
   const { userPermissions = [] } = useGetUserPermissions(currentUserId);
 
+  const showVesselManagement = useMemo(
+    () => userPermissions.includes(PERMISSION.READ_VESSEL),
+    [userPermissions]
+  );
   const showUserManagement = useMemo(
-    () => userPermissions.includes(READ_USER),
+    () => userPermissions.includes(PERMISSION.READ_USER),
     [userPermissions]
   );
   const showRoleManagement = useMemo(
-    () => userPermissions.includes(READ_ROLE),
+    () => userPermissions.includes(PERMISSION.READ_ROLE),
     [userPermissions]
   );
   const showPermissionManagement = useMemo(
-    () => userPermissions.includes(READ_PERMISSION),
+    () => userPermissions.includes(PERMISSION.READ_PERMISSION),
     [userPermissions]
   );
 
@@ -90,6 +90,15 @@ const MainLayout = ({ Component }: LayoutProps) => {
           >
             <Link href="/dashboard">Dashboard</Link>
           </Menu.Item>
+          {showVesselManagement && (
+            <Menu.Item
+              key="vessels"
+              icon={<GlobalOutlined />}
+              className="text-white"
+            >
+              <Link href="/vessels">Vessel Management</Link>
+            </Menu.Item>
+          )}
           {showUserManagement && (
             <Menu.Item
               key="users"

@@ -15,15 +15,21 @@ export const CURRENT_USER = "current_user";
 export const ADMIN_ROLE_ID = "1";
 export const USER_ROLE_ID = "2";
 
-export const CREATE_USER = "1";
-export const READ_USER = "2";
-export const UPDATE_USER = "3";
-export const DELETE_USER = "4";
-export const CREATE_ROLE = "5";
-export const READ_ROLE = "6";
-export const UPDATE_ROLE = "7";
-export const DELETE_ROLE = "8";
-export const READ_PERMISSION = "9";
+export enum PERMISSION {
+  CREATE_USER = "1",
+  READ_USER = "2",
+  UPDATE_USER = "3",
+  DELETE_USER = "4",
+  CREATE_ROLE = "5",
+  READ_ROLE = "6",
+  UPDATE_ROLE = "7",
+  DELETE_ROLE = "8",
+  READ_PERMISSION = "9",
+  READ_VESSEL = "10",
+  CREATE_VESSEL = "11",
+  UPDATE_VESSEL = "12",
+  DELETE_VESSEL = "13",
+}
 
 export const INVALID_REFRESH_TOKEN = "Invalid Refresh Token" + "!";
 

@@ -70,7 +70,7 @@ const LoginForm = () => {
               className="!p-2"
             />
           </Form.Item>
-          <div className="flex justify-end">
+          <div className="flex justify-end mt-2">
             <Typography.Text
               className="font-bold cursor-pointer text-sm"
               style={{ color: brandColor }}
