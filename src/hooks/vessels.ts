@@ -27,15 +27,15 @@ export const useGetAllVessels = (filter: Filter = DEFAULT_FILTER) => {
 };
 
 export const useGetVesselDetail = ({
-  vesselCode,
+  vesselId,
   enabled = true,
 }: {
-  vesselCode: string;
+  vesselId: string;
   enabled?: boolean;
 }): { vessel: Vessel; isLoadingVesselDetail: boolean } => {
   const { data, isLoading } = useQuery(
-    ["get_vessel_detail", vesselCode],
-    () => getVesselDetail(vesselCode),
+    ["get_vessel_detail", vesselId],
+    () => getVesselDetail(vesselId),
     {
       enabled,
     }

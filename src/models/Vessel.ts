@@ -1,4 +1,5 @@
 export default interface Vessel {
+  id: string;
   vsl_cd: string;
   vsl_clss_flg: string;
   vsl_eng_nm: string;

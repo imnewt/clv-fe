@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { isEmpty } from "lodash";
 
 import VesselTable from "./components/VesselTable";
-// import CreateUpdateUserModal from "./components/CreateUpdateUserModal";
+import CreateUpdateVesselModal from "./components/CreateUpdateVesselModal";
 import { SearchBar } from "@/components";
 import {
   DEFAULT_PAGE_NUMBER,
@@ -21,7 +21,7 @@ const VesselManagement = () => {
   const currentUserId = getCurrentUser();
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [selectedUserId, setSelectedUserId] = useState<string>("");
+  const [selectedVesselId, setSelectedVesselId] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [pagination, setPagination] =
     useState<TablePaginationConfig>(DEFAULT_PAGINATION);
@@ -35,7 +35,7 @@ const VesselManagement = () => {
     pageNumber: pagination.current || DEFAULT_PAGE_NUMBER,
     pageSize: pagination.pageSize || DEFAULT_PAGE_SIZE,
   });
-  console.log("vessels", vessels);
+
   const { userPermissions, isLoadingUserPermissions } =
     useGetUserPermissions(currentUserId);
 
@@ -74,14 +74,14 @@ const VesselManagement = () => {
     setIsModalOpen(true);
   };
 
-  const handleEditButtonClick = (userId: string) => {
-    setSelectedUserId(userId);
+  const handleEditButtonClick = (vesselId: string) => {
+    setSelectedVesselId(vesselId);
     handleOpenModal();
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    setSelectedUserId("");
+    setSelectedVesselId("");
   };
 
   return (
@@ -90,7 +90,7 @@ const VesselManagement = () => {
       <div className="flex">
         <div className="w-64">
           <SearchBar
-            placeholder="Search by vessel name"
+            placeholder="Search by vessel code"
             onSetSearchTerm={setSearchTerm}
           />
         </div>
@@ -114,11 +114,11 @@ const VesselManagement = () => {
           onEditButtonClick={handleEditButtonClick}
         />
       </div>
-      {/* <CreateUpdateUserModal
-        userId={selectedUserId}
+      <CreateUpdateVesselModal
+        vesselId={selectedVesselId}
         isOpen={isModalOpen}
         onClose={handleCloseModal}
-      /> */}
+      />
     </Spin>
   );
 };

@@ -78,6 +78,7 @@ const UserTable = ({
       title: "Action",
       key: "action",
       dataIndex: "id",
+      align: "center",
       render: (id) => (
         <Space>
           {canUpdate ? (

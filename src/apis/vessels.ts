@@ -12,8 +12,8 @@ export const getAllVessels = async (filter: Filter) => {
   return response.data;
 };
 
-export const getVesselDetail = async (vesselCode: string) => {
-  const response = await Axios.get(`${API_GATEWAY_URL}/vessels/${vesselCode}`);
+export const getVesselDetail = async (vesselId: string) => {
+  const response = await Axios.get(`${API_GATEWAY_URL}/vessels/${vesselId}`);
   return response.data;
 };
 
@@ -26,7 +26,7 @@ export const createVessel = async (vessel: Vessel) => {
 
 export const updateVessel = async (vessel: Vessel) => {
   const response = await Axios.patch(
-    `${API_GATEWAY_URL}/vessels/${vessel.vsl_cd}`,
+    `${API_GATEWAY_URL}/vessels/${vessel.id}`,
     {
       ...vessel,
     }
@@ -34,9 +34,7 @@ export const updateVessel = async (vessel: Vessel) => {
   return response.data;
 };
 
-export const deleteVessel = async ({ vesselCode }: { vesselCode: string }) => {
-  const response = await Axios.delete(
-    `${API_GATEWAY_URL}/vessels/${vesselCode}`
-  );
+export const deleteVessel = async ({ vesselId }: { vesselId: string }) => {
+  const response = await Axios.delete(`${API_GATEWAY_URL}/vessels/${vesselId}`);
   return response.data;
 };

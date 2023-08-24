@@ -22,7 +22,7 @@ const CreateUpdateUserModal = ({
 
   const { user, isLoadingUserDetail } = useGetUserDetail({
     userId,
-    enabled: isOpen,
+    enabled: isOpen && !!userId,
   });
   const { roles = [], isLoadingRoles } = useGetAllRoles();
 
