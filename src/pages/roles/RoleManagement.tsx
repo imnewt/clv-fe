@@ -57,14 +57,10 @@ const RoleManagement = () => {
   );
 
   useEffect(() => {
-    if (
-      router.pathname === "/roles" &&
-      !isEmpty(userPermissions) &&
-      !haveReadRolePermission
-    ) {
-      router.push("/not-found");
+    if (!isEmpty(userPermissions) && !haveReadRolePermission) {
+      router.push("/404");
     }
-  }, [router, userPermissions, haveReadRolePermission]);
+  }, [userPermissions, haveReadRolePermission, router]);
 
   const tablePagination = useMemo(() => {
     return { ...pagination, total };
@@ -84,7 +80,7 @@ const RoleManagement = () => {
     setSelectedRoleId("");
   };
 
-  return (
+  return haveReadRolePermission ? (
     <Spin spinning={isLoadingUserPermissions}>
       <Typography.Title level={3}>Role Management</Typography.Title>
       <div className="flex">
@@ -120,6 +116,8 @@ const RoleManagement = () => {
         onClose={handleCloseModal}
       />
     </Spin>
+  ) : (
+    <></>
   );
 };
 

@@ -61,14 +61,10 @@ const VesselManagement = () => {
   }, [pagination, total]);
 
   useEffect(() => {
-    if (
-      router.pathname === "/vessels" &&
-      !isEmpty(userPermissions) &&
-      !haveReadVesselPermission
-    ) {
-      router.push("/not-found");
+    if (!isEmpty(userPermissions) && !haveReadVesselPermission) {
+      router.push("/404");
     }
-  }, [router, userPermissions, haveReadVesselPermission]);
+  }, [userPermissions, haveReadVesselPermission, router]);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -84,7 +80,7 @@ const VesselManagement = () => {
     setSelectedVesselId("");
   };
 
-  return (
+  return haveReadVesselPermission ? (
     <Spin spinning={isLoadingUserPermissions}>
       <Typography.Title level={3}>Vessel Management</Typography.Title>
       <div className="flex">
@@ -120,6 +116,8 @@ const VesselManagement = () => {
         onClose={handleCloseModal}
       />
     </Spin>
+  ) : (
+    <></>
   );
 };
 

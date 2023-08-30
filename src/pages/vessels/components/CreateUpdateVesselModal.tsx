@@ -1,5 +1,5 @@
 import { useEffect, useCallback, useMemo } from "react";
-import { Modal, Form, Input, Spin } from "antd";
+import { Modal, Form, Input, Spin, InputNumber } from "antd";
 import { useForm } from "antd/lib/form/Form";
 
 import {
@@ -14,6 +14,20 @@ interface CreateUpdateVesselModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
+
+export const MAXIMUM_VSL_CODE_LENGTH = 4;
+export const MAXIMUM_VSL_NAME_LENGTH = 50;
+export const MAXIMUM_REGISTRATION_NUMBER_LENGTH = 15;
+export const MAXIMUM_PHONE_NUMBER_LENGTH = 20;
+export const MAXIMUM_FAX_NUMBER_LENGTH = 20;
+export const MAXIMUM_TELEX_NUMBER_LENGTH = 20;
+export const MAXIMUM_EMAIL_LENGTH = 50;
+export const MAXIMUM_PI_CLUB_DESCRIPTION_LENGTH = 100;
+export const MAXIMUM_REGISTRATION_PORT_CODE_LENGTH = 5;
+export const MAXIMUM_CLASS_NUMBER_REGISTER_AREA_NAME_LENGTH = 20;
+export const MAXIMUM_VESSEL_CLASS_NUMBER_LENGTH = 10;
+export const MAXIMUM_VESSEL_BUILDER_NAME_LENGTH = 50;
+export const MAXIMUM_CARRIER_CODE_LENGTH = 3;
 
 const CreateUpdateVesselModal = ({
   vesselId,
@@ -110,69 +124,194 @@ const CreateUpdateVesselModal = ({
           <Form.Item
             label="Code"
             name="vsl_cd"
-            rules={[{ required: true, message: "This field is required!" }]}
+            rules={[
+              { required: true, message: "This field is required!" },
+              {
+                max: MAXIMUM_VSL_CODE_LENGTH,
+                message: `Maximum code length is ${MAXIMUM_VSL_CODE_LENGTH}`,
+              },
+            ]}
           >
             <Input disabled={!isCreate} className="p-2" />
           </Form.Item>
-          <Form.Item label="Vessel English Name" name="vsl_eng_nm">
+          <Form.Item
+            label="Vessel English Name"
+            name="vsl_eng_nm"
+            rules={[
+              {
+                max: MAXIMUM_VSL_NAME_LENGTH,
+                message: `Maximum vessel name length is ${MAXIMUM_VSL_NAME_LENGTH}`,
+              },
+            ]}
+          >
             <Input className="p-2" />
           </Form.Item>
-          <Form.Item label="Vessel Local Name" name="vsl_locl_nm">
+          <Form.Item
+            label="Vessel Local Name"
+            name="vsl_locl_nm"
+            rules={[
+              {
+                max: MAXIMUM_VSL_NAME_LENGTH,
+                message: `Maximum vessel name length is ${MAXIMUM_VSL_NAME_LENGTH}`,
+              },
+            ]}
+          >
             <Input className="p-2" />
           </Form.Item>
           <Form.Item label="Fuel Oil Capacity" name="foil_capa">
-            <Input className="p-2" />
+            <InputNumber className="p-1 w-full" />
           </Form.Item>
           <Form.Item label="Diesel Oil Capacity" name="doil_capa">
-            <Input className="p-2" />
+            <InputNumber className="p-1 w-full" />
           </Form.Item>
           <Form.Item label="Fresh Water Capacity" name="frsh_wtr_capa">
+            <InputNumber className="p-1 w-full" />
+          </Form.Item>
+          <Form.Item
+            label="Registration Number"
+            name="rgst_no"
+            rules={[
+              {
+                max: MAXIMUM_REGISTRATION_NUMBER_LENGTH,
+                message: `Maximum registration number length is ${MAXIMUM_REGISTRATION_NUMBER_LENGTH}`,
+              },
+            ]}
+          >
             <Input className="p-2" />
           </Form.Item>
-          <Form.Item label="Registration Number" name="rgst_no">
+          <Form.Item
+            label="Phone Number"
+            name="phn_no"
+            rules={[
+              {
+                max: MAXIMUM_PHONE_NUMBER_LENGTH,
+                message: `Maximum phone number length is ${MAXIMUM_PHONE_NUMBER_LENGTH}`,
+              },
+            ]}
+          >
             <Input className="p-2" />
           </Form.Item>
-          <Form.Item label="Phone Number" name="phn_no">
+          <Form.Item
+            label="Fax Number"
+            name="fax_no"
+            rules={[
+              {
+                max: MAXIMUM_FAX_NUMBER_LENGTH,
+                message: `Maximum fax number length is ${MAXIMUM_FAX_NUMBER_LENGTH}`,
+              },
+            ]}
+          >
             <Input className="p-2" />
           </Form.Item>
-          <Form.Item label="Fax Number" name="fax_no">
+          <Form.Item
+            label="Telex Number"
+            name="tlx_no"
+            rules={[
+              {
+                max: MAXIMUM_TELEX_NUMBER_LENGTH,
+                message: `Maximum telex number length is ${MAXIMUM_TELEX_NUMBER_LENGTH}`,
+              },
+            ]}
+          >
             <Input className="p-2" />
           </Form.Item>
-          <Form.Item label="Telex Number" name="tlx_no">
+          <Form.Item
+            label="Vessel Email"
+            name="vsl_eml"
+            rules={[
+              {
+                pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g,
+                message: "Invalid email!",
+                validateTrigger: "onSubmit",
+              },
+              {
+                max: MAXIMUM_EMAIL_LENGTH,
+                message: `Maximum email length is ${MAXIMUM_EMAIL_LENGTH}`,
+              },
+            ]}
+          >
             <Input className="p-2" />
           </Form.Item>
-          <Form.Item label="Vessel Email" name="vsl_eml">
+          <Form.Item
+            label="P&I Club Description"
+            name="piclb_desc"
+            rules={[
+              {
+                max: MAXIMUM_PI_CLUB_DESCRIPTION_LENGTH,
+                message: `Maximum P&I club description length is ${MAXIMUM_PI_CLUB_DESCRIPTION_LENGTH}`,
+              },
+            ]}
+          >
             <Input className="p-2" />
           </Form.Item>
-          <Form.Item label="P&I Club Description" name="piclb_desc">
-            <Input className="p-2" />
-          </Form.Item>
-          <Form.Item label="Registration Port Code" name="rgst_port_cd">
+          <Form.Item
+            label="Registration Port Code"
+            name="rgst_port_cd"
+            rules={[
+              {
+                max: MAXIMUM_REGISTRATION_PORT_CODE_LENGTH,
+                message: `Maximum registration port code length is ${MAXIMUM_REGISTRATION_PORT_CODE_LENGTH}`,
+              },
+            ]}
+          >
             <Input className="p-2" />
           </Form.Item>
           <Form.Item
             label="Class Number Register Area Name"
             name="clss_no_rgst_area_nm"
+            rules={[
+              {
+                max: MAXIMUM_CLASS_NUMBER_REGISTER_AREA_NAME_LENGTH,
+                message: `Maximum class number register area name length is ${MAXIMUM_CLASS_NUMBER_REGISTER_AREA_NAME_LENGTH}`,
+              },
+            ]}
           >
             <Input className="p-2" />
           </Form.Item>
-          <Form.Item label="Vessel Class Number" name="vsl_clss_no">
+          <Form.Item
+            label="Vessel Class Number"
+            name="vsl_clss_no"
+            rules={[
+              {
+                max: MAXIMUM_VESSEL_CLASS_NUMBER_LENGTH,
+                message: `Maximum vessel class number length is ${MAXIMUM_VESSEL_CLASS_NUMBER_LENGTH}`,
+              },
+            ]}
+          >
             <Input className="p-2" />
           </Form.Item>
-          <Form.Item label="Vessel Builder Name" name="vsl_bldr_nm">
+          <Form.Item
+            label="Vessel Builder Name"
+            name="vsl_bldr_nm"
+            rules={[
+              {
+                max: MAXIMUM_VESSEL_BUILDER_NAME_LENGTH,
+                message: `Maximum vessel builder name length is ${MAXIMUM_VESSEL_BUILDER_NAME_LENGTH}`,
+              },
+            ]}
+          >
             <Input className="p-2" />
           </Form.Item>
           <Form.Item label="LOA Length" name="loa_len">
-            <Input className="p-2" />
+            <InputNumber className="p-1 w-full" />
           </Form.Item>
           <Form.Item label="LBP Length" name="lbp_len">
-            <Input className="p-2" />
+            <InputNumber className="p-1 w-full" />
           </Form.Item>
-          <Form.Item label="Carrier Code" name="crr_cd">
+          <Form.Item
+            label="Carrier Code"
+            name="crr_cd"
+            rules={[
+              {
+                max: MAXIMUM_CARRIER_CODE_LENGTH,
+                message: `Maximum carrier code length is ${MAXIMUM_CARRIER_CODE_LENGTH}`,
+              },
+            ]}
+          >
             <Input className="p-2" />
           </Form.Item>
           <Form.Item label="Net Ton" name="pnm_net_tong_wgt">
-            <Input className="p-2" />
+            <InputNumber className="p-1 w-full" />
           </Form.Item>
         </Form>
       </Spin>

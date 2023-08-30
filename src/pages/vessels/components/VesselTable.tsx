@@ -6,6 +6,7 @@ import moment from "moment";
 
 import Vessel from "@/models/Vessel";
 import { useDeleteVessel } from "@/hooks/vessels";
+import VesselDetail from "./VesselDetail";
 
 interface VesselTableProps {
   data: Vessel[];
@@ -40,64 +41,9 @@ const VesselTable = ({
       key: "vsl_eng_nm",
     },
     {
-      title: "Vessel Local Name",
-      dataIndex: "vsl_locl_nm",
-      key: "vsl_locl_nm",
-    },
-    {
-      title: "Fuel Oil Capacity",
-      dataIndex: "foil_capa",
-      key: "foil_capa",
-    },
-    {
-      title: "Diesel Oil Capacity",
-      dataIndex: "doil_capa",
-      key: "doil_capa",
-    },
-    {
-      title: "Fresh Water Capacity",
-      key: "frsh_wtr_capa",
-      dataIndex: "frsh_wtr_capa",
-    },
-    {
       title: "Registration Number",
       key: "rgst_no",
       dataIndex: "rgst_no",
-    },
-    {
-      title: "Phone Number",
-      key: "phn_no",
-      dataIndex: "phn_no",
-    },
-    {
-      title: "Fax Number",
-      key: "fax_no",
-      dataIndex: "fax_no",
-    },
-    {
-      title: "Telex Number",
-      key: "tlx_no",
-      dataIndex: "tlx_no",
-    },
-    {
-      title: "Vessel Email",
-      key: "vsl_eml",
-      dataIndex: "vsl_eml",
-    },
-    {
-      title: "P&I Club Description",
-      key: "piclb_desc",
-      dataIndex: "piclb_desc",
-    },
-    {
-      title: "Registration Port Code",
-      key: "rgst_port_cd",
-      dataIndex: "rgst_port_cd",
-    },
-    {
-      title: "Class Number Register Area Name",
-      key: "clss_no_rgst_area_nm",
-      dataIndex: "clss_no_rgst_area_nm",
     },
     {
       title: "Vessel Class Number",
@@ -105,29 +51,9 @@ const VesselTable = ({
       dataIndex: "vsl_clss_no",
     },
     {
-      title: "Vessel Builder Name",
-      key: "vsl_bldr_nm",
-      dataIndex: "vsl_bldr_nm",
-    },
-    {
-      title: "LOA Length",
-      key: "loa_len",
-      dataIndex: "loa_len",
-    },
-    {
-      title: "LBP Length",
-      key: "lbp_len",
-      dataIndex: "lbp_len",
-    },
-    {
       title: "Carrier Code",
       dataIndex: "crr_cd",
       key: "crr_cd",
-    },
-    {
-      title: "Net Ton",
-      key: "pnm_net_tong_wgt",
-      dataIndex: "pnm_net_tong_wgt",
     },
     {
       title: "Created At",
@@ -187,9 +113,14 @@ const VesselTable = ({
         pagination={pagination}
         onChange={onSetPagination}
         loading={isLoading}
+        expandable={{
+          expandedRowRender: (vessel: Vessel) => (
+            <VesselDetail vessel={vessel} />
+          ),
+        }}
         rowKey={(vessel) => vessel.id}
         bordered
-        scroll={{ x: "400rem" }}
+        // scroll={{ x: "40rem" }}
       />
     </>
   );

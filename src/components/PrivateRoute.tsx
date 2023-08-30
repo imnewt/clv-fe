@@ -15,7 +15,7 @@ const PrivateRoute: any = ({ children }: PrivateRouteProps) => {
     if (!loggedIn) safePush("/login");
   }, [loggedIn, safePush]);
 
-  return children;
+  return loggedIn ? children : null;
 };
 
 export default PrivateRoute;

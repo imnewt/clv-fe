@@ -60,14 +60,10 @@ const UserManagement = () => {
   }, [pagination, total]);
 
   useEffect(() => {
-    if (
-      router.pathname === "/users" &&
-      !isEmpty(userPermissions) &&
-      !haveReadUserPermission
-    ) {
-      router.push("/not-found");
+    if (!isEmpty(userPermissions) && !haveReadUserPermission) {
+      router.push("/404");
     }
-  }, [router, userPermissions, haveReadUserPermission]);
+  }, [userPermissions, haveReadUserPermission, router]);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -83,7 +79,7 @@ const UserManagement = () => {
     setSelectedUserId("");
   };
 
-  return (
+  return haveReadUserPermission ? (
     <Spin spinning={isLoadingUserPermissions}>
       <Typography.Title level={3}>User Management</Typography.Title>
       <div className="flex">
@@ -119,6 +115,8 @@ const UserManagement = () => {
         onClose={handleCloseModal}
       />
     </Spin>
+  ) : (
+    <></>
   );
 };
 

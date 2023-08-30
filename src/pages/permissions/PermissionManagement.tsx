@@ -44,20 +44,16 @@ const PermissionManagement = () => {
   );
 
   useEffect(() => {
-    if (
-      router.pathname === "/permissions" &&
-      !isEmpty(userPermissions) &&
-      !haveReadPermissionPermission
-    ) {
-      router.push("/not-found");
+    if (!isEmpty(userPermissions) && !haveReadPermissionPermission) {
+      router.push("/404");
     }
-  }, [router, userPermissions, haveReadPermissionPermission]);
+  }, [userPermissions, haveReadPermissionPermission, router]);
 
   const tablePagination = useMemo(() => {
     return { ...pagination, total };
   }, [pagination, total]);
 
-  return (
+  return haveReadPermissionPermission ? (
     <Spin spinning={isLoadingUserPermissions}>
       <Typography.Title level={3}>Permission Management</Typography.Title>
       <div className="w-64">
@@ -75,6 +71,8 @@ const PermissionManagement = () => {
         />
       </div>
     </Spin>
+  ) : (
+    <></>
   );
 };
 
