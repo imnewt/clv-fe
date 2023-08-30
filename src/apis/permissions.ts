@@ -6,14 +6,16 @@ import { requestParamsFromObject } from "@/utils/functions";
 
 export const getAllPermissions = async (filter: Filter) => {
   const response = await Axios.get(
-    `${API_GATEWAY_URL}/permissions${requestParamsFromObject({ ...filter })}`
+    `${API_GATEWAY_URL}/user-service/permissions${requestParamsFromObject({
+      ...filter,
+    })}`
   );
   return response.data;
 };
 
 export const getUserPermissions = async (userId: string) => {
   const response = await Axios.get(
-    `${API_GATEWAY_URL}/users/${userId}/permissions`
+    `${API_GATEWAY_URL}/user-service/users/${userId}/permissions`
   );
   return response.data;
 };
