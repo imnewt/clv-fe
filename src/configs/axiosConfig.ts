@@ -20,7 +20,7 @@ async function refreshAccessToken() {
   try {
     const refreshToken = getRefreshToken();
     const response = await axiosInstance.post(
-      `${API_GATEWAY_URL}/auth/refresh-token`,
+      `${API_GATEWAY_URL}/user-service/auth/refresh-token`,
       {
         refreshToken,
       }
