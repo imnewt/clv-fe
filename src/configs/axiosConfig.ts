@@ -59,8 +59,8 @@ const setupAxiosInterceptors = (): void => {
     return response;
   };
   const onResponseError = async (error: any) => {
-    const errorMessage = get(error, "response.data.message") || "";
-    if (errorMessage === INVALID_REFRESH_TOKEN) {
+    const errorMessages = get(error, "response.data") || [];
+    if (errorMessages[0] === INVALID_REFRESH_TOKEN) {
       return logout();
     }
     const originalRequest = error.config;

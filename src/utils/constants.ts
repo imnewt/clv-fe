@@ -31,7 +31,7 @@ export enum PERMISSION {
   DELETE_VESSEL = "13",
 }
 
-export const INVALID_REFRESH_TOKEN = "Invalid Refresh Token" + "!";
+export const INVALID_REFRESH_TOKEN = "Invalid refresh token!";
 
 export const DEFAULT_PAGE_NUMBER = 1;
 export const DEFAULT_PAGE_SIZE = 10;

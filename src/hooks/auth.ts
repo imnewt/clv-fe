@@ -26,8 +26,8 @@ export const useLogin = ({ onSuccess }: { onSuccess?: () => void }) => {
       onSuccess?.();
     },
     onError: (error) => {
-      const errorMessage = get(error, "response.data.message") || "";
-      showError("Login failed!", errorMessage);
+      const errorMessages = get(error, "response.data") || [];
+      showError("Login failed!", errorMessages);
     },
   });
 
@@ -50,8 +50,8 @@ export const useRegister = ({ onSuccess }: { onSuccess?: () => void }) => {
       onSuccess?.();
     },
     onError: (error) => {
-      const errorMessage = get(error, "response.data.message") || "";
-      showError("Register failed!", errorMessage);
+      const errorMessages = get(error, "response.data") || [];
+      showError("Register failed!", errorMessages);
     },
   });
 
@@ -76,8 +76,8 @@ export const useSendResetPasswordRequest = ({
       onSuccess?.();
     },
     onError: (error) => {
-      const errorMessage = get(error, "response.data.message") || "";
-      showError("Send reset password request failed!", errorMessage);
+      const errorMessages = get(error, "response.data") || [];
+      showError("Send reset password request failed!", errorMessages);
     },
   });
 
@@ -96,8 +96,8 @@ export const useResetPassword = ({ onSuccess }: { onSuccess?: () => void }) => {
       onSuccess?.();
     },
     onError: (error) => {
-      const errorMessage = get(error, "response.data.message") || "";
-      showError("Reset password failed!", errorMessage);
+      const errorMessages = get(error, "response.data") || [];
+      showError("Reset password failed!", errorMessages);
     },
   });
 

@@ -53,8 +53,8 @@ export const useCreateUser = ({ onSuccess }: { onSuccess?: () => void }) => {
       onSuccess?.();
     },
     onError: (error) => {
-      const errorMessage = get(error, "response.data.message") || "";
-      showError("Create User Failed!", errorMessage);
+      const errorMessages = get(error, "response.data") || [];
+      showError("Create User Failed!", errorMessages);
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["get_all_users"] });
@@ -74,8 +74,8 @@ export const useUpdateUser = ({ onSuccess }: { onSuccess?: () => void }) => {
       onSuccess?.();
     },
     onError: (error) => {
-      const errorMessage = get(error, "response.data.message") || "";
-      showError("Update User Failed!", errorMessage);
+      const errorMessages = get(error, "response.data") || [];
+      showError("Update User Failed!", errorMessages);
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["get_all_users"] });
@@ -95,8 +95,8 @@ export const useDeleteUser = ({ onSuccess }: { onSuccess?: () => void }) => {
       onSuccess?.();
     },
     onError: (error) => {
-      const errorMessage = get(error, "response.data.message") || "";
-      showError("Delete User Failed!", errorMessage);
+      const errorMessages = get(error, "response.data") || [];
+      showError("Delete User Failed!", errorMessages);
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["get_all_users"] });

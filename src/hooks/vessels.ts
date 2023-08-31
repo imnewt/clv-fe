@@ -53,8 +53,8 @@ export const useCreateVessel = ({ onSuccess }: { onSuccess?: () => void }) => {
       onSuccess?.();
     },
     onError: (error) => {
-      const errorMessage = get(error, "response.data.message") || "";
-      showError("Create Vessel Failed!", errorMessage);
+      const errorMessages = get(error, "response.data") || [];
+      showError("Create Vessel Failed!", errorMessages);
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["get_all_vessels"] });
@@ -74,8 +74,8 @@ export const useUpdateVessel = ({ onSuccess }: { onSuccess?: () => void }) => {
       onSuccess?.();
     },
     onError: (error) => {
-      const errorMessage = get(error, "response.data.message") || "";
-      showError("Update Vessel Failed!", errorMessage);
+      const errorMessages = get(error, "response.data") || [];
+      showError("Update Vessel Failed!", errorMessages);
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["get_all_vessels"] });
@@ -95,8 +95,8 @@ export const useDeleteVessel = ({ onSuccess }: { onSuccess?: () => void }) => {
       onSuccess?.();
     },
     onError: (error) => {
-      const errorMessage = get(error, "response.data.message") || "";
-      showError("Delete Vessel Failed!", errorMessage);
+      const errorMessages = get(error, "response.data") || [];
+      showError("Delete Vessel Failed!", errorMessages);
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["get_all_vessels"] });

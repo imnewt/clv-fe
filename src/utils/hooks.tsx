@@ -1,6 +1,7 @@
-import { notification } from "antd";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { notification } from "antd";
+import { isEmpty } from "lodash";
 
 const DEFAULT_ERROR_DESCRIPTION = "An error has occurred. Please try again!";
 const DEFAULT_ERROR_MESSAGE = "Error!";
@@ -34,10 +35,18 @@ export const useSafePush = () => {
 };
 
 export const useShowError = () => {
-  const showError = (message: string, description: string) => {
+  const showError = (message: string, descriptions: string[]) => {
     notification.error({
       message: message || DEFAULT_ERROR_MESSAGE,
-      description: description || DEFAULT_ERROR_DESCRIPTION,
+      description: !isEmpty(descriptions) ? (
+        <div>
+          {descriptions.map((description) => (
+            <p key={description}>{description}</p>
+          ))}
+        </div>
+      ) : (
+        DEFAULT_ERROR_DESCRIPTION
+      ),
     });
   };
 

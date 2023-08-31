@@ -53,8 +53,8 @@ export const useCreateRole = ({ onSuccess }: { onSuccess?: () => void }) => {
       onSuccess?.();
     },
     onError: (error) => {
-      const errorMessage = get(error, "response.data.message") || "";
-      showError("Create Role Failed!", errorMessage);
+      const errorMessages = get(error, "response.data") || [];
+      showError("Create Role Failed!", errorMessages);
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["get_all_roles"] });
@@ -74,8 +74,8 @@ export const useUpdateRole = ({ onSuccess }: { onSuccess?: () => void }) => {
       onSuccess?.();
     },
     onError: (error) => {
-      const errorMessage = get(error, "response.data.message") || "";
-      showError("Update Role Failed!", errorMessage);
+      const errorMessages = get(error, "response.data") || [];
+      showError("Update Role Failed!", errorMessages);
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["get_all_roles"] });
@@ -95,8 +95,8 @@ export const useDeleteRole = ({ onSuccess }: { onSuccess?: () => void }) => {
       onSuccess?.();
     },
     onError: (error) => {
-      const errorMessage = get(error, "response.data.message") || "";
-      showError("Delete Role Failed!", errorMessage);
+      const errorMessages = get(error, "response.data") || [];
+      showError("Delete Role Failed!", errorMessages);
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["get_all_roles"] });

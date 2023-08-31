@@ -32,8 +32,8 @@ export const useGetUserPermissions = (userId: string) => {
   );
 
   if (isError) {
-    const errorMessage = get(error, "response.data.message") || "";
-    showError("Error while fetching user permissions", errorMessage);
+    const errorMessages = get(error, "response.data") || [];
+    showError("Error while fetching user permissions", errorMessages);
   }
 
   const permissionIds = data.map((permission) => permission.id);
