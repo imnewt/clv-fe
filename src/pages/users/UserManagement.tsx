@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
-import { Typography, Button, TablePaginationConfig, Spin } from "antd";
+import { Typography, Button, TablePaginationConfig } from "antd";
 import { useRouter } from "next/router";
 import { isEmpty } from "lodash";
 
@@ -13,12 +13,11 @@ import {
   DEFAULT_PAGINATION,
 } from "@/utils/constants";
 import { getCurrentUser } from "@/utils/functions";
-import { useGetUserPermissions } from "@/hooks/permissions";
 import { useGetAllUsers } from "@/hooks/users";
 
 const UserManagement = () => {
   const router = useRouter();
-  const currentUserId = getCurrentUser();
+  const currentUser = getCurrentUser();
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedUserId, setSelectedUserId] = useState<string>("");
@@ -35,24 +34,21 @@ const UserManagement = () => {
     pageNumber: pagination.current || DEFAULT_PAGE_NUMBER,
     pageSize: pagination.pageSize || DEFAULT_PAGE_SIZE,
   });
-  const { userPermissions, isLoadingUserPermissions } =
-    useGetUserPermissions(currentUserId);
-
   const haveReadUserPermission = useMemo(
-    () => userPermissions.includes(PERMISSION.READ_USER),
-    [userPermissions]
+    () => currentUser.permissions.includes(PERMISSION.READ_USER),
+    [currentUser.permissions]
   );
   const haveCreateUserPermission = useMemo(
-    () => userPermissions.includes(PERMISSION.CREATE_USER),
-    [userPermissions]
+    () => currentUser.permissions.includes(PERMISSION.CREATE_USER),
+    [currentUser.permissions]
   );
   const haveUpdateUserPermission = useMemo(
-    () => userPermissions.includes(PERMISSION.UPDATE_USER),
-    [userPermissions]
+    () => currentUser.permissions.includes(PERMISSION.UPDATE_USER),
+    [currentUser.permissions]
   );
   const haveDeleteUserPermission = useMemo(
-    () => userPermissions.includes(PERMISSION.DELETE_USER),
-    [userPermissions]
+    () => currentUser.permissions.includes(PERMISSION.DELETE_USER),
+    [currentUser.permissions]
   );
 
   const tablePagination = useMemo(() => {
@@ -60,10 +56,10 @@ const UserManagement = () => {
   }, [pagination, total]);
 
   useEffect(() => {
-    if (!isEmpty(userPermissions) && !haveReadUserPermission) {
+    if (!isEmpty(currentUser.permissions) && !haveReadUserPermission) {
       router.push("/404");
     }
-  }, [userPermissions, haveReadUserPermission, router]);
+  }, [currentUser.permissions, haveReadUserPermission, router]);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -80,7 +76,7 @@ const UserManagement = () => {
   };
 
   return haveReadUserPermission ? (
-    <Spin spinning={isLoadingUserPermissions}>
+    <>
       <Typography.Title level={3}>User Management</Typography.Title>
       <div className="flex">
         <div className="w-64">
@@ -114,7 +110,7 @@ const UserManagement = () => {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
       />
-    </Spin>
+    </>
   ) : (
     <></>
   );

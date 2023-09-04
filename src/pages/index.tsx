@@ -7,6 +7,7 @@ const Home = () => {
   const loggedIn = isLoggedIn();
   const router = useRouter();
 
+  // Handle login with Google
   useEffect(() => {
     const { query } = router;
     const { accessToken, refreshToken, userId } = query;
@@ -15,7 +16,7 @@ const Home = () => {
         accessToken: accessToken as string,
         refreshToken: refreshToken as string,
       });
-      setCurrentUser(userId as string);
+      setCurrentUser({ id: userId as string, permissions: [] });
       router.replace({
         pathname: "/dashboard",
         query: {},

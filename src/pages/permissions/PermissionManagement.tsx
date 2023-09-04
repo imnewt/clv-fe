@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
-import { Spin, TablePaginationConfig, Typography } from "antd";
+import { TablePaginationConfig, Typography } from "antd";
 import { useRouter } from "next/router";
 import { isEmpty } from "lodash";
 
@@ -12,14 +12,11 @@ import {
   PERMISSION,
 } from "@/utils/constants";
 import { getCurrentUser } from "@/utils/functions";
-import {
-  useGetAllPermissions,
-  useGetUserPermissions,
-} from "@/hooks/permissions";
+import { useGetAllPermissions } from "@/hooks/permissions";
 
 const PermissionManagement = () => {
   const router = useRouter();
-  const currentUserId = getCurrentUser();
+  const currentUser = getCurrentUser();
 
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [pagination, setPagination] =
@@ -35,26 +32,23 @@ const PermissionManagement = () => {
     pageSize: pagination.pageSize || DEFAULT_PAGE_SIZE,
   });
 
-  const { userPermissions, isLoadingUserPermissions } =
-    useGetUserPermissions(currentUserId);
-
   const haveReadPermissionPermission = useMemo(
-    () => userPermissions.includes(PERMISSION.READ_PERMISSION),
-    [userPermissions]
+    () => currentUser.permissions.includes(PERMISSION.READ_PERMISSION),
+    [currentUser.permissions]
   );
 
   useEffect(() => {
-    if (!isEmpty(userPermissions) && !haveReadPermissionPermission) {
+    if (!isEmpty(currentUser.permissions) && !haveReadPermissionPermission) {
       router.push("/404");
     }
-  }, [userPermissions, haveReadPermissionPermission, router]);
+  }, [currentUser.permissions, haveReadPermissionPermission, router]);
 
   const tablePagination = useMemo(() => {
     return { ...pagination, total };
   }, [pagination, total]);
 
   return haveReadPermissionPermission ? (
-    <Spin spinning={isLoadingUserPermissions}>
+    <>
       <Typography.Title level={3}>Permission Management</Typography.Title>
       <div className="w-64">
         <SearchBar
@@ -70,7 +64,7 @@ const PermissionManagement = () => {
           onSetPagination={setPagination}
         />
       </div>
-    </Spin>
+    </>
   ) : (
     <></>
   );

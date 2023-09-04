@@ -2,7 +2,6 @@ import router from "next/router";
 import { isEmpty } from "lodash";
 
 import { Auth } from "@/models/Auth";
-
 import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY, CURRENT_USER } from "./constants";
 
 export const isServer = typeof window === "undefined";
@@ -50,11 +49,11 @@ export const getRefreshToken = (): string => {
   return localStorage.getItem(REFRESH_TOKEN_KEY) || "";
 };
 
-export const setCurrentUser = (userId: string) => {
+export const setCurrentUser = (user: { id: string; permissions: string[] }) => {
   if (isServer) {
     return;
   }
-  localStorage.setItem(CURRENT_USER, userId);
+  localStorage.setItem(CURRENT_USER, JSON.stringify(user));
 };
 
 export const removeCurrentUser = () => {
@@ -64,11 +63,16 @@ export const removeCurrentUser = () => {
   localStorage.removeItem(CURRENT_USER);
 };
 
-export const getCurrentUser = (): string => {
+export const getCurrentUser = () => {
   if (isServer) {
-    return "";
+    return {};
   }
-  return localStorage.getItem(CURRENT_USER) || "";
+  try {
+    const user = localStorage.getItem(CURRENT_USER) || "{}";
+    return JSON.parse(user);
+  } catch (error) {
+    console.log("Error while getting current user", error);
+  }
 };
 
 export const isBlank = (value: any): boolean =>

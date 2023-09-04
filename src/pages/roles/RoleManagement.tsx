@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
-import { Typography, Button, TablePaginationConfig, Spin } from "antd";
+import { Typography, Button, TablePaginationConfig } from "antd";
 import { useRouter } from "next/router";
 import { isEmpty } from "lodash";
 
@@ -13,12 +13,11 @@ import {
   DEFAULT_PAGINATION,
 } from "@/utils/constants";
 import { getCurrentUser } from "@/utils/functions";
-import { useGetUserPermissions } from "@/hooks/permissions";
 import { useGetAllRoles } from "@/hooks/roles";
 
 const RoleManagement = () => {
   const router = useRouter();
-  const currentUserId = getCurrentUser();
+  const currentUser = getCurrentUser();
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedRoleId, setSelectedRoleId] = useState<string>("");
@@ -36,31 +35,28 @@ const RoleManagement = () => {
     pageSize: pagination.pageSize || DEFAULT_PAGE_SIZE,
   });
 
-  const { userPermissions, isLoadingUserPermissions } =
-    useGetUserPermissions(currentUserId);
-
   const haveReadRolePermission = useMemo(
-    () => userPermissions.includes(PERMISSION.READ_ROLE),
-    [userPermissions]
+    () => currentUser.permissions.includes(PERMISSION.READ_ROLE),
+    [currentUser.permissions]
   );
   const haveCreateRolePermission = useMemo(
-    () => userPermissions.includes(PERMISSION.CREATE_ROLE),
-    [userPermissions]
+    () => currentUser.permissions.includes(PERMISSION.CREATE_ROLE),
+    [currentUser.permissions]
   );
   const haveUpdateRolePermission = useMemo(
-    () => userPermissions.includes(PERMISSION.UPDATE_ROLE),
-    [userPermissions]
+    () => currentUser.permissions.includes(PERMISSION.UPDATE_ROLE),
+    [currentUser.permissions]
   );
   const haveDeleteRolePermission = useMemo(
-    () => userPermissions.includes(PERMISSION.DELETE_ROLE),
-    [userPermissions]
+    () => currentUser.permissions.includes(PERMISSION.DELETE_ROLE),
+    [currentUser.permissions]
   );
 
   useEffect(() => {
-    if (!isEmpty(userPermissions) && !haveReadRolePermission) {
+    if (!isEmpty(currentUser.permissions) && !haveReadRolePermission) {
       router.push("/404");
     }
-  }, [userPermissions, haveReadRolePermission, router]);
+  }, [currentUser.permissions, haveReadRolePermission, router]);
 
   const tablePagination = useMemo(() => {
     return { ...pagination, total };
@@ -81,7 +77,7 @@ const RoleManagement = () => {
   };
 
   return haveReadRolePermission ? (
-    <Spin spinning={isLoadingUserPermissions}>
+    <>
       <Typography.Title level={3}>Role Management</Typography.Title>
       <div className="flex">
         <div className="w-64">
@@ -115,7 +111,7 @@ const RoleManagement = () => {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
       />
-    </Spin>
+    </>
   ) : (
     <></>
   );

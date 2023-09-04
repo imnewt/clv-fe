@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
-import { Typography, Button, TablePaginationConfig, Spin } from "antd";
+import { Typography, Button, TablePaginationConfig } from "antd";
 import { useRouter } from "next/router";
 import { isEmpty } from "lodash";
 
@@ -13,12 +13,11 @@ import {
   PERMISSION,
 } from "@/utils/constants";
 import { getCurrentUser } from "@/utils/functions";
-import { useGetUserPermissions } from "@/hooks/permissions";
 import { useGetAllVessels } from "@/hooks/vessels";
 
 const VesselManagement = () => {
   const router = useRouter();
-  const currentUserId = getCurrentUser();
+  const currentUser = getCurrentUser();
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedVesselId, setSelectedVesselId] = useState<string>("");
@@ -36,24 +35,21 @@ const VesselManagement = () => {
     pageSize: pagination.pageSize || DEFAULT_PAGE_SIZE,
   });
 
-  const { userPermissions, isLoadingUserPermissions } =
-    useGetUserPermissions(currentUserId);
-
   const haveReadVesselPermission = useMemo(
-    () => userPermissions.includes(PERMISSION.READ_VESSEL),
-    [userPermissions]
+    () => currentUser.permissions.includes(PERMISSION.READ_VESSEL),
+    [currentUser.permissions]
   );
   const haveCreateVesselPermission = useMemo(
-    () => userPermissions.includes(PERMISSION.CREATE_VESSEL),
-    [userPermissions]
+    () => currentUser.permissions.includes(PERMISSION.CREATE_VESSEL),
+    [currentUser.permissions]
   );
   const haveUpdateVesselPermission = useMemo(
-    () => userPermissions.includes(PERMISSION.UPDATE_VESSEL),
-    [userPermissions]
+    () => currentUser.permissions.includes(PERMISSION.UPDATE_VESSEL),
+    [currentUser.permissions]
   );
   const haveDeleteVesselPermission = useMemo(
-    () => userPermissions.includes(PERMISSION.DELETE_VESSEL),
-    [userPermissions]
+    () => currentUser.permissions.includes(PERMISSION.DELETE_VESSEL),
+    [currentUser.permissions]
   );
 
   const tablePagination = useMemo(() => {
@@ -61,10 +57,10 @@ const VesselManagement = () => {
   }, [pagination, total]);
 
   useEffect(() => {
-    if (!isEmpty(userPermissions) && !haveReadVesselPermission) {
+    if (!isEmpty(currentUser.permissions) && !haveReadVesselPermission) {
       router.push("/404");
     }
-  }, [userPermissions, haveReadVesselPermission, router]);
+  }, [currentUser.permissions, haveReadVesselPermission, router]);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -81,7 +77,7 @@ const VesselManagement = () => {
   };
 
   return haveReadVesselPermission ? (
-    <Spin spinning={isLoadingUserPermissions}>
+    <>
       <Typography.Title level={3}>Vessel Management</Typography.Title>
       <div className="flex">
         <div className="w-64">
@@ -115,7 +111,7 @@ const VesselManagement = () => {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
       />
-    </Spin>
+    </>
   ) : (
     <></>
   );

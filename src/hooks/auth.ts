@@ -1,16 +1,16 @@
 import { useMutation } from "@tanstack/react-query";
 import { message } from "antd";
 import { get } from "lodash";
+import { useRouter } from "next/router";
 
 import { useShowError } from "@/utils/hooks";
+import { setAuth, setCurrentUser } from "@/utils/functions";
 import {
   sendResetPasswordRequest,
   resetPassword,
   register,
   login,
 } from "@/apis/auth";
-import { setAuth, setCurrentUser } from "@/utils/functions";
-import { useRouter } from "next/router";
 
 export const useLogin = ({ onSuccess }: { onSuccess?: () => void }) => {
   const router = useRouter();
@@ -21,7 +21,10 @@ export const useLogin = ({ onSuccess }: { onSuccess?: () => void }) => {
       message.success("Login successfully!");
       const { accessToken, refreshToken, userId } = data;
       setAuth({ accessToken, refreshToken });
-      setCurrentUser(userId);
+      setCurrentUser({
+        id: userId,
+        permissions: [],
+      });
       router.push("/dashboard");
       onSuccess?.();
     },
