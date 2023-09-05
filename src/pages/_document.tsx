@@ -1,39 +1,48 @@
-import React from "react";
+import Document, { Html, Head, Main, NextScript } from "next/document";
 import { StyleProvider, createCache, extractStyle } from "@ant-design/cssinjs";
-import Document, { Head, Html, Main, NextScript } from "next/document";
-import type { DocumentContext } from "next/document";
 
-const MyDocument = () => (
-  <Html lang="en">
-    <Head />
-    <body>
-      <Main />
-      <NextScript />
-    </body>
-  </Html>
-);
+type MyDocumentProps = {
+  styles: React.ReactNode;
+};
 
-MyDocument.getInitialProps = async (ctx: DocumentContext) => {
-  const cache = createCache();
+export class MyDocument extends Document<MyDocumentProps> {
+  render() {
+    return (
+      <Html lang="en">
+        <Head>{this.props.styles}</Head>
+        <body>
+          <Main />
+          <NextScript />
+        </body>
+      </Html>
+    );
+  }
+}
+
+MyDocument.getInitialProps = async (ctx) => {
   const originalRenderPage = ctx.renderPage;
+  const cache = createCache();
+
   ctx.renderPage = () =>
     originalRenderPage({
-      enhanceApp: (App) => (props) =>
-        (
-          <StyleProvider cache={cache}>
-            <App {...props} />
-          </StyleProvider>
-        ),
+      enhanceApp: (App) =>
+        function EnhanceApp(props) {
+          return (
+            <StyleProvider cache={cache}>
+              <App {...props} />
+            </StyleProvider>
+          );
+        },
     });
 
   const initialProps = await Document.getInitialProps(ctx);
-  const style = extractStyle(cache, true);
+
   return {
     ...initialProps,
     styles: (
       <>
         {initialProps.styles}
-        <style dangerouslySetInnerHTML={{ __html: style }} />
+        <style dangerouslySetInnerHTML={{ __html: extractStyle(cache) }} />
       </>
     ),
   };

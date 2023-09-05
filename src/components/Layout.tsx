@@ -33,21 +33,25 @@ const MainLayout = ({ Component }: LayoutProps) => {
   const [collapsed, setCollapsed] = useState<boolean>(false);
   const [mounted, setMounted] = useState<boolean>(false);
 
+  const userPermissions: string[] = useMemo(() => {
+    return currentUser.permissions || [];
+  }, [currentUser.permissions]);
+
   const showVesselManagement = useMemo(
-    () => currentUser.permissions.includes(PERMISSION.READ_VESSEL),
-    [currentUser.permissions]
+    () => userPermissions.includes(PERMISSION.READ_VESSEL),
+    [userPermissions]
   );
   const showUserManagement = useMemo(
-    () => currentUser.permissions.includes(PERMISSION.READ_USER),
-    [currentUser.permissions]
+    () => userPermissions.includes(PERMISSION.READ_USER),
+    [userPermissions]
   );
   const showRoleManagement = useMemo(
-    () => currentUser.permissions.includes(PERMISSION.READ_ROLE),
-    [currentUser.permissions]
+    () => userPermissions.includes(PERMISSION.READ_ROLE),
+    [userPermissions]
   );
   const showPermissionManagement = useMemo(
-    () => currentUser.permissions.includes(PERMISSION.READ_PERMISSION),
-    [currentUser.permissions]
+    () => userPermissions.includes(PERMISSION.READ_PERMISSION),
+    [userPermissions]
   );
 
   useEffect(() => {
@@ -77,7 +81,7 @@ const MainLayout = ({ Component }: LayoutProps) => {
           mode="inline"
           className="mt-4"
           style={{ background: "transparent" }}
-          // defaultSelectedKeys={[selectedMenu]}
+          defaultSelectedKeys={[selectedMenu]}
         >
           <Menu.Item
             key="dashboard"

@@ -34,21 +34,26 @@ const UserManagement = () => {
     pageNumber: pagination.current || DEFAULT_PAGE_NUMBER,
     pageSize: pagination.pageSize || DEFAULT_PAGE_SIZE,
   });
+
+  const userPermissions = useMemo(() => {
+    return currentUser.permissions || [];
+  }, [currentUser.permissions]);
+
   const haveReadUserPermission = useMemo(
-    () => currentUser.permissions.includes(PERMISSION.READ_USER),
-    [currentUser.permissions]
+    () => userPermissions.includes(PERMISSION.READ_USER),
+    [userPermissions]
   );
   const haveCreateUserPermission = useMemo(
-    () => currentUser.permissions.includes(PERMISSION.CREATE_USER),
-    [currentUser.permissions]
+    () => userPermissions.includes(PERMISSION.CREATE_USER),
+    [userPermissions]
   );
   const haveUpdateUserPermission = useMemo(
-    () => currentUser.permissions.includes(PERMISSION.UPDATE_USER),
-    [currentUser.permissions]
+    () => userPermissions.includes(PERMISSION.UPDATE_USER),
+    [userPermissions]
   );
   const haveDeleteUserPermission = useMemo(
-    () => currentUser.permissions.includes(PERMISSION.DELETE_USER),
-    [currentUser.permissions]
+    () => userPermissions.includes(PERMISSION.DELETE_USER),
+    [userPermissions]
   );
 
   const tablePagination = useMemo(() => {
@@ -56,10 +61,10 @@ const UserManagement = () => {
   }, [pagination, total]);
 
   useEffect(() => {
-    if (!isEmpty(currentUser.permissions) && !haveReadUserPermission) {
+    if (!isEmpty(userPermissions) && !haveReadUserPermission) {
       router.push("/404");
     }
-  }, [currentUser.permissions, haveReadUserPermission, router]);
+  }, [userPermissions, haveReadUserPermission, router]);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);

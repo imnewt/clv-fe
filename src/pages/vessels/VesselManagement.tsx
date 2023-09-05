@@ -35,21 +35,25 @@ const VesselManagement = () => {
     pageSize: pagination.pageSize || DEFAULT_PAGE_SIZE,
   });
 
+  const userPermissions = useMemo(() => {
+    return currentUser.permissions || [];
+  }, [currentUser.permissions]);
+
   const haveReadVesselPermission = useMemo(
-    () => currentUser.permissions.includes(PERMISSION.READ_VESSEL),
-    [currentUser.permissions]
+    () => userPermissions.includes(PERMISSION.READ_VESSEL),
+    [userPermissions]
   );
   const haveCreateVesselPermission = useMemo(
-    () => currentUser.permissions.includes(PERMISSION.CREATE_VESSEL),
-    [currentUser.permissions]
+    () => userPermissions.includes(PERMISSION.CREATE_VESSEL),
+    [userPermissions]
   );
   const haveUpdateVesselPermission = useMemo(
-    () => currentUser.permissions.includes(PERMISSION.UPDATE_VESSEL),
-    [currentUser.permissions]
+    () => userPermissions.includes(PERMISSION.UPDATE_VESSEL),
+    [userPermissions]
   );
   const haveDeleteVesselPermission = useMemo(
-    () => currentUser.permissions.includes(PERMISSION.DELETE_VESSEL),
-    [currentUser.permissions]
+    () => userPermissions.includes(PERMISSION.DELETE_VESSEL),
+    [userPermissions]
   );
 
   const tablePagination = useMemo(() => {
@@ -57,10 +61,10 @@ const VesselManagement = () => {
   }, [pagination, total]);
 
   useEffect(() => {
-    if (!isEmpty(currentUser.permissions) && !haveReadVesselPermission) {
+    if (!isEmpty(userPermissions) && !haveReadVesselPermission) {
       router.push("/404");
     }
-  }, [currentUser.permissions, haveReadVesselPermission, router]);
+  }, [userPermissions, haveReadVesselPermission, router]);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);

@@ -32,16 +32,20 @@ const PermissionManagement = () => {
     pageSize: pagination.pageSize || DEFAULT_PAGE_SIZE,
   });
 
+  const userPermissions = useMemo(() => {
+    return currentUser.permissions || [];
+  }, [currentUser.permissions]);
+
   const haveReadPermissionPermission = useMemo(
-    () => currentUser.permissions.includes(PERMISSION.READ_PERMISSION),
-    [currentUser.permissions]
+    () => userPermissions.includes(PERMISSION.READ_PERMISSION),
+    [userPermissions]
   );
 
   useEffect(() => {
-    if (!isEmpty(currentUser.permissions) && !haveReadPermissionPermission) {
+    if (!isEmpty(userPermissions) && !haveReadPermissionPermission) {
       router.push("/404");
     }
-  }, [currentUser.permissions, haveReadPermissionPermission, router]);
+  }, [userPermissions, haveReadPermissionPermission, router]);
 
   const tablePagination = useMemo(() => {
     return { ...pagination, total };
