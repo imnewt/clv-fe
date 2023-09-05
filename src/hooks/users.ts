@@ -53,7 +53,7 @@ export const useCreateUser = ({ onSuccess }: { onSuccess?: () => void }) => {
       onSuccess?.();
     },
     onError: (error) => {
-      const errorMessages = get(error, "response.data") || [];
+      const errorMessages = get(error, "response.data.errors") || [];
       showError("Create User Failed!", errorMessages);
     },
     onSettled: () => {
@@ -74,7 +74,7 @@ export const useUpdateUser = ({ onSuccess }: { onSuccess?: () => void }) => {
       onSuccess?.();
     },
     onError: (error) => {
-      const errorMessages = get(error, "response.data") || [];
+      const errorMessages = get(error, "response.data.errors") || [];
       showError("Update User Failed!", errorMessages);
     },
     onSettled: () => {
@@ -95,7 +95,7 @@ export const useDeleteUser = ({ onSuccess }: { onSuccess?: () => void }) => {
       onSuccess?.();
     },
     onError: (error) => {
-      const errorMessages = get(error, "response.data") || [];
+      const errorMessages = get(error, "response.data.errors") || [];
       showError("Delete User Failed!", errorMessages);
     },
     onSettled: () => {

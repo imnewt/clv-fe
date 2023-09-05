@@ -106,23 +106,18 @@ const VesselTable = ({
   ];
 
   return (
-    <>
-      <Table<Vessel>
-        columns={columns}
-        dataSource={data}
-        pagination={pagination}
-        onChange={onSetPagination}
-        loading={isLoading}
-        expandable={{
-          expandedRowRender: (vessel: Vessel) => (
-            <VesselDetail vessel={vessel} />
-          ),
-        }}
-        rowKey={(vessel) => vessel.id}
-        bordered
-        // scroll={{ x: "40rem" }}
-      />
-    </>
+    <Table<Vessel>
+      columns={columns}
+      dataSource={data}
+      pagination={pagination}
+      onChange={onSetPagination}
+      loading={isLoading}
+      expandable={{
+        expandedRowRender: (vessel: Vessel) => <VesselDetail vessel={vessel} />,
+      }}
+      rowKey={(vessel) => vessel.id}
+      bordered
+    />
   );
 };
 

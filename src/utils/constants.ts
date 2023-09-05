@@ -48,3 +48,7 @@ export const DEFAULT_PAGINATION: TablePaginationConfig = {
   showSizeChanger: true,
   position: ["bottomRight", "topRight"],
 };
+
+export const DEFAULT_ERROR_DESCRIPTION =
+  "An error has occurred. Please try again!";
+export const DEFAULT_ERROR_MESSAGE = "Error!";

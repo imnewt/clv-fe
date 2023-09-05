@@ -1,25 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Card, Col, Progress, Row, Space, Statistic } from "antd";
 import { ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
-import { isEmpty } from "lodash";
-
-import { getCurrentUser, setCurrentUser } from "@/utils/functions";
-import { useGetUserPermissions } from "@/hooks/permissions";
 
 const Dashboard = () => {
-  const currentUser = getCurrentUser();
-
-  const { userPermissions = [] } = useGetUserPermissions(currentUser.id);
-
-  useEffect(() => {
-    if (currentUser.id && !isEmpty(userPermissions)) {
-      setCurrentUser({
-        id: currentUser.id,
-        permissions: userPermissions,
-      });
-    }
-  }, [currentUser.id, userPermissions]);
-
   return (
     <div>
       <Row gutter={16}>

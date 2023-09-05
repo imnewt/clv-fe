@@ -29,7 +29,7 @@ export const useLogin = ({ onSuccess }: { onSuccess?: () => void }) => {
       onSuccess?.();
     },
     onError: (error) => {
-      const errorMessages = get(error, "response.data") || [];
+      const errorMessages = get(error, "response.data.errors") || [];
       showError("Login failed!", errorMessages);
     },
   });
@@ -53,7 +53,7 @@ export const useRegister = ({ onSuccess }: { onSuccess?: () => void }) => {
       onSuccess?.();
     },
     onError: (error) => {
-      const errorMessages = get(error, "response.data") || [];
+      const errorMessages = get(error, "response.data.errors") || [];
       showError("Register failed!", errorMessages);
     },
   });
@@ -79,7 +79,7 @@ export const useSendResetPasswordRequest = ({
       onSuccess?.();
     },
     onError: (error) => {
-      const errorMessages = get(error, "response.data") || [];
+      const errorMessages = get(error, "response.data.errors") || [];
       showError("Send reset password request failed!", errorMessages);
     },
   });
@@ -99,7 +99,7 @@ export const useResetPassword = ({ onSuccess }: { onSuccess?: () => void }) => {
       onSuccess?.();
     },
     onError: (error) => {
-      const errorMessages = get(error, "response.data") || [];
+      const errorMessages = get(error, "response.data.errors") || [];
       showError("Reset password failed!", errorMessages);
     },
   });

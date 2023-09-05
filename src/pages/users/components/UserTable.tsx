@@ -50,6 +50,7 @@ const UserTable = ({
       key: "roles",
       dataIndex: "roles",
       width: "20rem",
+      align: "center",
       render: (roles) => (
         <>
           {roles.map((role: Role) => {
@@ -112,16 +113,15 @@ const UserTable = ({
   ];
 
   return (
-    <>
-      <Table<User>
-        columns={columns}
-        dataSource={data}
-        pagination={pagination}
-        onChange={onSetPagination}
-        loading={isLoading}
-        rowKey={(user) => user.id}
-      />
-    </>
+    <Table<User>
+      columns={columns}
+      dataSource={data}
+      pagination={pagination}
+      onChange={onSetPagination}
+      loading={isLoading}
+      rowKey={(user) => user.id}
+      bordered
+    />
   );
 };
 

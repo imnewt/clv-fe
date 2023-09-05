@@ -8,14 +8,16 @@ import {
   DashboardOutlined,
   GlobalOutlined,
 } from "@ant-design/icons";
+import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import Link from "next/link";
+import { isEmpty } from "lodash";
 
 import Logo from "public/images/logo.png";
 import TransparentLogo from "public/images/logo-transparent.png";
 import { brandColor, PERMISSION } from "@/utils/constants";
-import { getCurrentUser, logout } from "@/utils/functions";
+import { getCurrentUser, logout, setCurrentUser } from "@/utils/functions";
+import { useGetUserPermissions } from "@/hooks/permissions";
 
 const { Header, Sider, Content } = Layout;
 
@@ -33,9 +35,16 @@ const MainLayout = ({ Component }: LayoutProps) => {
   const [collapsed, setCollapsed] = useState<boolean>(false);
   const [mounted, setMounted] = useState<boolean>(false);
 
-  const userPermissions: string[] = useMemo(() => {
-    return currentUser.permissions || [];
-  }, [currentUser.permissions]);
+  const { userPermissions = [] } = useGetUserPermissions(currentUser.id);
+
+  useEffect(() => {
+    if (currentUser.id && !isEmpty(userPermissions)) {
+      setCurrentUser({
+        id: currentUser.id,
+        permissions: userPermissions,
+      });
+    }
+  }, [currentUser.id, userPermissions]);
 
   const showVesselManagement = useMemo(
     () => userPermissions.includes(PERMISSION.READ_VESSEL),

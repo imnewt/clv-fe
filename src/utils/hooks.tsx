@@ -3,8 +3,7 @@ import { useRouter } from "next/router";
 import { notification } from "antd";
 import { isEmpty } from "lodash";
 
-const DEFAULT_ERROR_DESCRIPTION = "An error has occurred. Please try again!";
-const DEFAULT_ERROR_MESSAGE = "Error!";
+import { DEFAULT_ERROR_DESCRIPTION, DEFAULT_ERROR_MESSAGE } from "./constants";
 
 // safePush is used to avoid route pushing errors when users click multiple times
 // or when the network is slow:  "Error: Abort fetching component for route"

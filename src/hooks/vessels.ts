@@ -53,7 +53,7 @@ export const useCreateVessel = ({ onSuccess }: { onSuccess?: () => void }) => {
       onSuccess?.();
     },
     onError: (error) => {
-      const errorMessages = get(error, "response.data") || [];
+      const errorMessages = get(error, "response.data.errors") || [];
       showError("Create Vessel Failed!", errorMessages);
     },
     onSettled: () => {
@@ -74,7 +74,7 @@ export const useUpdateVessel = ({ onSuccess }: { onSuccess?: () => void }) => {
       onSuccess?.();
     },
     onError: (error) => {
-      const errorMessages = get(error, "response.data") || [];
+      const errorMessages = get(error, "response.data.errors") || [];
       showError("Update Vessel Failed!", errorMessages);
     },
     onSettled: () => {
@@ -95,7 +95,7 @@ export const useDeleteVessel = ({ onSuccess }: { onSuccess?: () => void }) => {
       onSuccess?.();
     },
     onError: (error) => {
-      const errorMessages = get(error, "response.data") || [];
+      const errorMessages = get(error, "response.data.errors") || [];
       showError("Delete Vessel Failed!", errorMessages);
     },
     onSettled: () => {

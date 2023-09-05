@@ -59,15 +59,12 @@ const setupAxiosInterceptors = (): void => {
     return response;
   };
   const onResponseError = async (error: any) => {
-    const errorMessages = get(error, "response.data") || [];
+    const errorMessages = get(error, "response.data.errors") || [];
     if (errorMessages[0] === INVALID_REFRESH_TOKEN) {
       return logout();
     }
     const originalRequest = error.config;
-    if (
-      error.response &&
-      (error.response.status === 401 || error.response.status === 403)
-    ) {
+    if (error.response && error.response.status === 401) {
       if (!isRefreshing) {
         isRefreshing = true;
         const newAccessToken = await refreshAccessToken();

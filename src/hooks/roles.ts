@@ -53,7 +53,7 @@ export const useCreateRole = ({ onSuccess }: { onSuccess?: () => void }) => {
       onSuccess?.();
     },
     onError: (error) => {
-      const errorMessages = get(error, "response.data") || [];
+      const errorMessages = get(error, "response.data.errors") || [];
       showError("Create Role Failed!", errorMessages);
     },
     onSettled: () => {
@@ -74,7 +74,7 @@ export const useUpdateRole = ({ onSuccess }: { onSuccess?: () => void }) => {
       onSuccess?.();
     },
     onError: (error) => {
-      const errorMessages = get(error, "response.data") || [];
+      const errorMessages = get(error, "response.data.errors") || [];
       showError("Update Role Failed!", errorMessages);
     },
     onSettled: () => {
@@ -95,7 +95,7 @@ export const useDeleteRole = ({ onSuccess }: { onSuccess?: () => void }) => {
       onSuccess?.();
     },
     onError: (error) => {
-      const errorMessages = get(error, "response.data") || [];
+      const errorMessages = get(error, "response.data.errors") || [];
       showError("Delete Role Failed!", errorMessages);
     },
     onSettled: () => {

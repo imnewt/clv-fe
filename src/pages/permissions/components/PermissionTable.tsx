@@ -37,16 +37,15 @@ const PermissionTable = ({
   ];
 
   return (
-    <>
-      <Table
-        columns={columns}
-        dataSource={data}
-        loading={isLoading}
-        pagination={pagination}
-        onChange={onSetPagination}
-        rowKey={(permission) => permission.id}
-      />
-    </>
+    <Table
+      columns={columns}
+      dataSource={data}
+      loading={isLoading}
+      pagination={pagination}
+      onChange={onSetPagination}
+      rowKey={(permission) => permission.id}
+      bordered
+    />
   );
 };
 

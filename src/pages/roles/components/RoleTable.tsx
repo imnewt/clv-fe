@@ -53,6 +53,7 @@ const RoleTable = ({
       key: "permissions",
       dataIndex: "permissions",
       width: "20rem",
+      align: "center",
       render: (permissions) => (
         <>
           {permissions.map((permission: Permission) => {
@@ -125,16 +126,15 @@ const RoleTable = ({
   ];
 
   return (
-    <>
-      <Table
-        columns={columns}
-        dataSource={data}
-        loading={isLoading}
-        pagination={pagination}
-        onChange={onSetPagination}
-        rowKey={(role) => role.id}
-      />
-    </>
+    <Table<Role>
+      columns={columns}
+      dataSource={data}
+      loading={isLoading}
+      pagination={pagination}
+      onChange={onSetPagination}
+      rowKey={(role) => role.id}
+      bordered
+    />
   );
 };
 
