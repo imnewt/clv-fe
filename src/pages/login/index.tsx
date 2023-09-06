@@ -21,4 +21,6 @@ const Login = () => {
   );
 };
 
+Login.isPublic = true;
+
 export default Login;

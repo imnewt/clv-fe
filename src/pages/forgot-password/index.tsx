@@ -21,4 +21,6 @@ const ForgotPassword = () => {
   );
 };
 
+ForgotPassword.isPublic = true;
+
 export default ForgotPassword;

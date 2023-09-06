@@ -21,4 +21,6 @@ const Register = () => {
   );
 };
 
+Register.isPublic = true;
+
 export default Register;

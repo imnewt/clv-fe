@@ -21,4 +21,6 @@ const ResetPassword = () => {
   );
 };
 
+ResetPassword.isPublic = true;
+
 export default ResetPassword;

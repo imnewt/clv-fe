@@ -22,10 +22,10 @@ import { useGetUserPermissions } from "@/hooks/permissions";
 const { Header, Sider, Content } = Layout;
 
 interface LayoutProps {
-  Component: React.FC;
+  children: React.ReactNode;
 }
 
-const MainLayout = ({ Component }: LayoutProps) => {
+const MainLayout = ({ children }: LayoutProps) => {
   const router = useRouter();
   const currentUser = getCurrentUser();
   const {
@@ -160,7 +160,7 @@ const MainLayout = ({ Component }: LayoutProps) => {
           className="m-6 p-6 shadow-md"
           style={{ background: colorBgContainer }}
         >
-          <Component />
+          {children}
         </Content>
       </Layout>
     </Layout>
