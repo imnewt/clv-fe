@@ -18,14 +18,14 @@ export const useGetAllPermissions = (filter: Filter = DEFAULT_FILTER) => {
 };
 
 export const useGetUserPermissions = (userId: string) => {
-  const { data, isLoading } = useQuery<Permission[]>(
+  const { data = [], isLoading } = useQuery<Permission[]>(
     ["get_user_permissions", userId],
     () => getUserPermissions(userId),
     {
       enabled: !!userId,
     }
   );
-  const permissionIds = data?.map((permission) => permission.id);
+  const permissionIds = data.map((permission) => permission.id);
   return {
     userPermissions: permissionIds,
     isLoading,

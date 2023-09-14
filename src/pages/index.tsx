@@ -1,9 +1,10 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 
-import { setAuth, setCurrentUser } from "@/utils/functions";
+import { isLoggedIn, setAuth, setCurrentUser } from "@/utils/functions";
 
 const Home = () => {
+  const loggedIn = isLoggedIn();
   const router = useRouter();
 
   // Handle login with Google
@@ -22,6 +23,11 @@ const Home = () => {
       });
     }
   }, [router]);
+
+  useEffect(() => {
+    if (!loggedIn) router.push("/login");
+    else router.push("/dashboard");
+  }, [loggedIn, router]);
 
   return null;
 };
