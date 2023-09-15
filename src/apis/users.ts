@@ -22,12 +22,9 @@ export const getUserDetail = async (userId: string) => {
 };
 
 export const createUser = async (user: NewUser) => {
-  const response = await Axios.post(
-    `${API_GATEWAY_URL}/user-service/users/create`,
-    {
-      ...user,
-    }
-  );
+  const response = await Axios.post(`${API_GATEWAY_URL}/user-service/users`, {
+    ...user,
+  });
   return response.data;
 };
 

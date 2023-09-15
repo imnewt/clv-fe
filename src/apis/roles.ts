@@ -22,12 +22,9 @@ export const getRoleDetail = async (roleId: string) => {
 };
 
 export const createRole = async (role: NewRole) => {
-  const response = await Axios.post(
-    `${API_GATEWAY_URL}/user-service/roles/create`,
-    {
-      ...role,
-    }
-  );
+  const response = await Axios.post(`${API_GATEWAY_URL}/user-service/roles`, {
+    ...role,
+  });
   return response.data;
 };
 

@@ -23,7 +23,7 @@ export const getVesselDetail = async (vesselId: string) => {
 
 export const createVessel = async (vessel: Vessel) => {
   const response = await Axios.post(
-    `${API_GATEWAY_URL}/vessel-service/vessels/create`,
+    `${API_GATEWAY_URL}/vessel-service/vessels`,
     {
       ...vessel,
     }
